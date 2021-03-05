@@ -1,0 +1,18 @@
+# Enter your custom commands here. It will be executed on stage 2
+# before running services.
+
+# Clean /tmp
+/bin/rm -fr /tmp/{.*,*} &> /dev/null
+
+# Set hardware timer(s) frequencies
+echo 2048 >/sys/class/rtc/rtc0/max_user_freq
+echo 2048 >/proc/sys/dev/hpet/max-user-freq
+
+# TLP
+tlp start
+
+# Set irq priorities
+rtirq start
+
+# Set system clock
+ntpd
