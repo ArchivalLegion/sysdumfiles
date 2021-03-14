@@ -6,7 +6,7 @@ GRUB_TIMEOUT=4
 GRUB_TIMEOUT_STYLE=menu
 
 # Kernel CLI.
-GRUB_CMDLINE_LINUX="quiet loglevel=1 pcie_aspm=force nowatchdog threadirqs noibrs noibpb nopti nospectre_v2 nospectre_v1 l1tf=off nospec_store_bypass_disable no_stf_barrier mds=off tsx=on tsx_async_abort=off mitigations=off"
+GRUB_CMDLINE_LINUX="quiet loglevel=1 nowatchdog threadirqs noibrs noibpb nopti nospectre_v2 nospectre_v1 l1tf=off nospec_store_bypass_disable no_stf_barrier mds=off tsx=on tsx_async_abort=off mitigations=off"
 GRUB_CMDLINE_LINUX_DEFAULT="rd.auto=1"
 
 # Desired menu colors, used by normal and wallpaper
@@ -17,5 +17,5 @@ GRUB_COLOR_HIGHLIGHT="light-green/black"
 # Disable recovery entries.
 GRUB_DISABLE_RECOVERY=true
 
-# Enable encrypted /boot on Luks1
+# Enable encrypted /boot on Luks1.
 GRUB_ENABLE_CRYPTODISK=y
