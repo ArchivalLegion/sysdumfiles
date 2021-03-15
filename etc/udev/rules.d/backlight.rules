@@ -1,2 +1,5 @@
+# Change group to wheel
 ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="/bin/chgrp wheel /sys/class/backlight/intel_backlight/brightness"
+
+# Allow wheel to write
 ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness"
