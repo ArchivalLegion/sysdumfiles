@@ -1,7 +1,7 @@
 # Load last selected entry.
 GRUB_DEFAULT=saved
 GRUB_SAVEDEFAULT=true
-# Timer before selecting entry.
+# Time before selecting saved entry.
 GRUB_TIMEOUT=4
 GRUB_TIMEOUT_STYLE=menu
 
@@ -17,5 +17,5 @@ GRUB_COLOR_HIGHLIGHT="light-green/black"
 # Disable recovery entries.
 GRUB_DISABLE_RECOVERY=true
 
-# Enable encrypted /boot on Luks1.
+# Enable encrypted /boot on Luks 1/2.
 GRUB_ENABLE_CRYPTODISK=y
