@@ -48,6 +48,9 @@ mesa-demos
 mpv
 nano
 nautilus
+nautilus-image-converter
+nautilus-share
+nautilus-terminal
 nitrogen
 noto-fonts
 noto-fonts-cjk
@@ -76,6 +79,7 @@ sed
 smartmontools
 streamlink
 sudo
+sushi
 sxiv
 tlp
 tmux
