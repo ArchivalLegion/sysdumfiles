@@ -15,6 +15,7 @@ dracut
 dunst
 efibootmgr
 ethtool
+file-roller
 ffmpegthumbnailer
 geany
 git
@@ -40,7 +41,6 @@ libva-utils
 linux-firmware
 linux-lts
 linux-lts-headers
-lsb-release
 lv2
 lvm2
 mcomix
@@ -60,7 +60,6 @@ openntpd
 p7zip
 papirus-icon-theme
 pavucontrol
-pcmanfm-qt
 pianobar
 picom
 polkit-gnome
@@ -91,12 +90,10 @@ vulkan-mesa-layers
 wmctrl
 wpa_supplicant
 x86_energy_perf_policy
-xclip
 xdg-user-dirs
 xdotool
 xorg
 xorg-server
 xorg-xinit
 xorg-xrdb
-xsel
 youtube-dl
