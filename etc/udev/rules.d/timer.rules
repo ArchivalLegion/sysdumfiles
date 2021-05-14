@@ -1,6 +1,3 @@
-# rw access to /dev/cpu_dma_latency to prevent CPUs from going into idle state
-KERNEL=="cpu_dma_latency", GROUP="audio"
-
 # rw access to /dev/rtc0
 KERNEL=="rtc0", GROUP="audio"
 
