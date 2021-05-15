@@ -1,16 +1,11 @@
 #!/bin/sh -e
 
-# Enter your custom commands here. It will be executed on stage 2
-# before running services.
-
 # Clean /tmp
 /bin/rm -fr /tmp/{.*,*} &> /dev/null
 
 # Set hardware timer(s) frequencies
 echo 2048 >/sys/class/rtc/rtc0/max_user_freq
 echo 2048 >/proc/sys/dev/hpet/max-user-freq
-chmod 660 /dev/hpet /dev/rtc0
-chgrp audio /dev/hpet /dev/rtc0
 
 # Disable hyper-threading, numa memory balancing,
 # kernel samepage merging, and transparent huge pages.
@@ -19,13 +14,7 @@ echo 0 > /proc/sys/kernel/numa_balancing
 echo 0 > /sys/kernel/mm/ksm/run
 echo off > /sys/devices/system/cpu/smt/control
 
-# TLP
-tlp start
-
 # Set irq priorities
 rtirq start
-
-# Set system clock
-ntpd
 
 exit 0
