@@ -1,21 +1,19 @@
-# Load last selected entry.
+# Load last selected entry
 GRUB_DEFAULT=saved
 GRUB_SAVEDEFAULT=true
-# Time before selecting saved entry.
-GRUB_TIMEOUT=4
+
+# Time before selecting saved entry
+GRUB_TIMEOUT=6
 GRUB_TIMEOUT_STYLE=menu
 
-# Kernel CLI.
+# Kernel CLI
 GRUB_CMDLINE_LINUX="quiet loglevel=1 nowatchdog threadirqs noibrs noibpb nopti nospectre_v2 nospectre_v1 l1tf=off nospec_store_bypass_disable no_stf_barrier mds=off tsx=on tsx_async_abort=off mitigations=off"
-GRUB_CMDLINE_LINUX_DEFAULT="rd.auto=1"
+GRUB_CMDLINE_LINUX_DEFAULT="rd.auto=1 sysrq_always_enabled=1"
 
 # Desired menu colors, used by normal and wallpaper
-# modes only. Entries specified as foreground/background.
+# modes only. Entries specified as foreground/background
 GRUB_COLOR_NORMAL="light-magenta/black"
 GRUB_COLOR_HIGHLIGHT="light-green/black"
 
-# Disable recovery entries.
-GRUB_DISABLE_RECOVERY=true
-
-# Enable encrypted /boot on Luks 1/2.
+# Enable encrypted /boot on LUKS
 GRUB_ENABLE_CRYPTODISK=y
