@@ -43,7 +43,6 @@ linux-lts
 linux-lts-headers
 lv2
 lvm2
-mcomix
 mesa-demos
 mpv
 nano
@@ -82,7 +81,6 @@ sushi
 sxiv
 tlp
 tmux
-totem
 ttf-croscore
 tumbler
 vlc
