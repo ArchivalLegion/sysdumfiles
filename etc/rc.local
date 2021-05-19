@@ -1,20 +1,11 @@
 #!/bin/sh -e
 
-# Clean /tmp
-/bin/rm -fr /tmp/{.*,*} &> /dev/null
-
-# Set hardware timer(s) frequencies
-echo 2048 >/sys/class/rtc/rtc0/max_user_freq
-echo 2048 >/proc/sys/dev/hpet/max-user-freq
-
 # Disable hyper-threading, numa memory balancing,
 # kernel samepage merging, and transparent huge pages.
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
 echo 0 > /proc/sys/kernel/numa_balancing
 echo 0 > /sys/kernel/mm/ksm/run
-echo off > /sys/devices/system/cpu/smt/control
-
-# Set irq priorities
-rtirq start
+# echo off > /sys/devices/system/cpu/smt/control
+# ^ SMT Hyper threading
 
 exit 0
