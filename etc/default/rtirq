@@ -1,15 +1,16 @@
 # /etc/rtirq.conf
 # /etc/default/rtirq
+# /etc/sysconfig/rtirq
 #
 # Configuration for IRQ thread tunning,
 # for preempt_rt/threadirqs enabled kernels.
 
 # IRQ thread service names
 # (space separated list, from higher to lower priority).
-RTIRQ_NAME_LIST="snd usb e1000e ath9k i8042"
+RTIRQ_NAME_LIST="snd usb i8042"
 
 # Highest priority.
-RTIRQ_PRIO_HIGH=99
+RTIRQ_PRIO_HIGH=90
 
 # Priority decrease step.
 RTIRQ_PRIO_DECR=5
@@ -17,13 +18,13 @@ RTIRQ_PRIO_DECR=5
 # Lowest priority.
 RTIRQ_PRIO_LOW=50
 
-# Whether to reset all IRQ threads to SCHED_OTHER.
-RTIRQ_RESET_ALL=1
+## Whether to reset all IRQ threads to SCHED_OTHER.
+RTIRQ_RESET_ALL=0
 
 # On kernel configurations that support it,
 # which services should be NOT threaded 
 # (space separated list).
-# RTIRQ_NON_THREADED="rtc snd"
+RTIRQ_NON_THREADED="rtc snd"
 
 # Process names which will be forced to the
 # highest realtime priority range (99-91)
