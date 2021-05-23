@@ -10,6 +10,7 @@ compton
 cowsay
 darktable
 dunst
+dracut
 efibootmgr
 feh
 filezilla
@@ -20,7 +21,8 @@ fluxbox
 fonts-noto*
 geany
 gimp
-grub
+grub2
+grub-efi
 gvfs
 gvfs-daemons
 gvfs-fuse
