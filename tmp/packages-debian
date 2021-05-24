@@ -12,6 +12,7 @@ cowsay
 dracut
 dunst
 efibootmgr
+exe-thumbnailer
 feh
 filezilla
 firefox-esr
@@ -72,10 +73,12 @@ neofetch
 network-manager
 network-manager-openvpn
 nitrogen
+ntfs-3g
 obconf-qt
 obmenu
 openbox
 openbox-menu
+p7zip-full
 papirus-icon-theme
 pavucontrol-qt
 pcmanfm-qt
@@ -94,6 +97,8 @@ sxiv
 synaptic
 tmux
 ttf-ubuntu-font-family
+tumbler
+unar
 vainfo
 variety
 vim
@@ -105,3 +110,4 @@ xinit
 xserver-xorg
 xserver-xorg-input-all
 xserver-xorg-video-all
+youtube-dl
