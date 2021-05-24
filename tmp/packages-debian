@@ -59,9 +59,6 @@ intel-microcode
 jwm
 keepassxc
 kmenuedit
-lightdm
-lightdm-gtk-greeter
-lightdm-gtk-greeter-settings
 linux-cpupower
 linux-image-rt-amd64
 matchbox-window-manager
@@ -81,10 +78,10 @@ openbox-menu
 p7zip-full
 papirus-icon-theme
 pavucontrol-qt
-pcmanfm-qt
+pcmanfm
 pulseaudio
 pulseaudio-module-bluetooth
-pulseaudio-module-dlna
+pulseaudio-dlna
 pulseaudio-module-jack
 pulsemixer
 qbittorrent
@@ -93,6 +90,7 @@ qt5-style-plugins
 rofi
 rxvt-unicode
 scrot
+sudo
 sxiv
 synaptic
 tmux
@@ -104,7 +102,7 @@ variety
 vim
 vrms
 xarchiver
-xdg-user-utils-gtk
+xdg-user-dirs-gtk
 xdotool
 xinit
 xserver-xorg
