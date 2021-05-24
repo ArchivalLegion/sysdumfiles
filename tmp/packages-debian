@@ -48,6 +48,7 @@ fluxbox
 fonts-croscore
 fonts-hack
 fonts-noto*
+fonts-ubuntu
 geany
 grub-efi-amd64
 gvfs
@@ -94,7 +95,6 @@ sudo
 sxiv
 synaptic
 tmux
-ttf-ubuntu-font-family
 tumbler
 unar
 vainfo
