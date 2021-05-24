@@ -1,3 +1,4 @@
+*-gtk-theme
 alsa-firmware-loaders
 alsa-utils
 amd64-microcode
@@ -50,6 +51,7 @@ fonts-noto*
 fonts-ubuntu
 geany
 grub-efi-amd64
+gtk2-engines*
 gvfs
 gvfs-daemons
 gvfs-fuse
@@ -61,6 +63,7 @@ keepassxc
 kmenuedit
 linux-cpupower
 linux-image-rt-amd64
+lxappearance
 matchbox-window-manager
 mate-polkit
 menu-xdg
