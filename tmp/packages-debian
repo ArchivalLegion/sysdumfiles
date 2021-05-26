@@ -1,8 +1,6 @@
-*-gtk-theme
 alsa-firmware-loaders
 alsa-utils
 amd64-microcode
-blackbox
 bluez-firmware
 breeze-cursor-theme
 build-essential
@@ -12,7 +10,6 @@ dracut
 dunst
 efibootmgr
 exe-thumbnailer
-feh
 filezilla
 firefox*
 firmware-amd-graphics
@@ -43,7 +40,6 @@ firmware-ti-connectivity
 firmware-zd1211
 flameshot
 flatpak
-fluxbox
 fonts-croscore
 fonts-hack
 fonts-noto*
@@ -57,14 +53,10 @@ gvfs-fuse
 htop
 icewm
 intel-microcode
-jwm
 keepassxc
 kmenuedit
 linux-cpupower
-linux-image-rt-amd64
-linux-image-rt-amd64-headers
 lxappearance
-matchbox-window-manager
 mate-polkit
 menu-xdg
 mpv
@@ -80,7 +72,7 @@ openbox
 openbox-menu
 p7zip-full
 papirus-icon-theme
-pavucontrol-qt
+pavucontrol
 pcmanfm
 pulseaudio
 pulseaudio-module-bluetooth
