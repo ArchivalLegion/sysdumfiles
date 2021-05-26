@@ -6,16 +6,15 @@ blackbox
 bluez-firmware
 breeze-cursor-theme
 build-essential
-calibre
+chromium
 compton
-cowsay
 dracut
 dunst
 efibootmgr
 exe-thumbnailer
 feh
 filezilla
-firefox-esr
+firefox*
 firmware-amd-graphics
 firmware-ath9k-htc
 firmware-atheros
@@ -63,6 +62,7 @@ keepassxc
 kmenuedit
 linux-cpupower
 linux-image-rt-amd64
+linux-image-rt-amd64-headers
 lxappearance
 matchbox-window-manager
 mate-polkit
@@ -105,7 +105,6 @@ unar
 vainfo
 variety
 vim
-vrms
 xarchiver
 xdg-user-dirs-gtk
 xdotool
