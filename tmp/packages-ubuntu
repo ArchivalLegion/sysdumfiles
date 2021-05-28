@@ -1,12 +1,11 @@
 alsa-firmware-loaders
 alsa-utils
 amd64-microcode
-bluez*
+bluez
 breeze-cursor-theme
 build-essential
 compton
 curl
-dracut
 dunst
 efibootmgr
 ethtool
@@ -24,16 +23,14 @@ gdisk
 geany
 grub-efi-amd64
 gtk2-engines*
-gvfs*
+gvfs
 htop
 icewm
 intel-microcode
 kdeconnect
 keepassxc
-kmenuedit
 lxappearance
 mate-polkit
-menu-xdg
 mpv
 nano
 neofetch
@@ -41,7 +38,6 @@ network-manager
 network-manager-openvpn
 nitrogen
 ntfs-3g
-ooo-thumbnailer
 p7zip-full
 papirus-icon-theme
 pavucontrol
@@ -78,5 +74,5 @@ xserver-xorg
 xserver-xorg-input-all
 xserver-xorg-video-all
 youtube-dl
-zfs-dracut
+zfs-initramfs
 zfsutils-linux
