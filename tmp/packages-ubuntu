@@ -5,6 +5,7 @@ bluez*
 breeze-cursor-theme
 build-essential
 compton
+curl
 dracut
 dunst
 efibootmgr
@@ -19,6 +20,7 @@ fonts-croscore
 fonts-hack
 fonts-noto*
 fonts-ubuntu
+gdisk
 geany
 grub-efi-amd64
 gtk2-engines*
@@ -66,6 +68,7 @@ tumbler-plugins-extra
 unar
 vainfo
 variety
+wget
 xarchiver
 xdg-user-dirs
 xdg-user-dirs-gtk
