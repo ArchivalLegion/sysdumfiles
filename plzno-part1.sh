@@ -51,8 +51,8 @@ sgdisk -n4:0:0 -t4:BF00 $DISK
 
 
 sync &&
+sleep 7 &&
 ls -l /dev/disk/by-id/
-sleep 4 &&
 
 
 zpool create -f \
@@ -72,7 +72,7 @@ zpool create -f \
 -O acltype=posixacl -O canmount=off -O compression=lz4 \
 -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
 -O mountpoint=/boot -R /mnt \
-bpool {$DISK}-part3
+bpool $DISK-part3
 
 echo "Boot pool"
 
@@ -83,7 +83,7 @@ echo $PASS | zpool create -f \
 -O acltype=posixacl -O canmount=off -O compression=lz4 \
 -O dnodesize=auto -O normalization=formD -O relatime=on \
 -O xattr=sa -O mountpoint=/ -R /mnt \
-rpool {$DISK}-part4
+rpool $DISK-part4
 
 echo "Root pool"
 
