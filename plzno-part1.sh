@@ -10,6 +10,7 @@ export USER=
 export HOSTNAME=
 export BOOTID=
 export RELEASE=focal
+export PASS=
 
 apt update
 
@@ -55,7 +56,7 @@ zpool create \
     
     
     
-    zpool create \
+    echo '$PASS' | zpool create \
     -o ashift=12 -o autotrim=on \
     -O encryption=aes-256-gcm \
     -O keylocation=prompt -O keyformat=passphrase \
