@@ -52,7 +52,7 @@ zpool create \
 -O acltype=posixacl -O canmount=off -O compression=lz4 \
 -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
 -O mountpoint=/boot -R /mnt \
- bpool ${DISK}-part3
+bpool ${DISK}-part3
     
     
     
