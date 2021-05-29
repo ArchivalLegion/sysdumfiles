@@ -1,99 +1,101 @@
 #!/bin/bash
 
-apt update
+apt update &&
 
 
-dpkg-reconfigure locales tzdata keyboard-configuration console-setup
+dpkg-reconfigure locales tzdata keyboard-configuration console-setup &&
 
 
-apt install --yes nano
+apt install --yes nano &&
 
 
-apt install --yes dosfstools
-
-
-
-mkdosfs -F 32 -s 1 -n $EFILABEL {$DISK}-part1
-mkdir /boot/efi
-echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part1) \
-/boot/efi vfat defaults 0 0 >> /etc/fstab
-mount /boot/efi
+apt install --yes dosfstools &&
 
 
 
-mkdir /boot/efi/grub /boot/grub
-echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab
-mount /boot/grub
+mkdosfs -F 32 -s 1 -n "$EFILABEL" "$DISK"-part1 &&
+mkdir /boot/efi &&
+echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) \
+/boot/efi vfat defaults 0 0 >> /etc/fstab &&
+mount /boot/efi &&
+
+
+
+mkdir /boot/efi/grub /boot/grub &&
+echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab &&
+mount /boot/grub &&
 
 
 
 apt install --yes \
 grub-efi-amd64 grub-efi-amd64-signed linux-image-generic \
-shim-signed zfs-initramfs
+shim-signed zfs-initramfs &&
 
 
 
-apt remove --purge --yes os-prober
+apt remove --purge --yes os-prober &&
 
 
-apt install --yes cryptsetup
+apt install --yes cryptsetup &&
 
 
 
-echo swap {$DISK}-part2 /dev/urandom \
-swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab
-echo /dev/mapper/swap none swap defaults 0 0 >> /etc/fstab
+echo swap $DISK-part2 /dev/urandom \
+swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab &&
+echo /dev/mapper/swap none swap defaults 0 0 >> /etc/fstab &&
 
 
-addgroup --system lpadmin
-addgroup --system lxd
-addgroup --system sambashare
+addgroup --system lpadmin &&
+addgroup --system lxd &&
+addgroup --system sambashare &&
 
 
-sudo apt install --yes curl patch
+sudo apt install --yes curl patch &&
 
 
 curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
-sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1)
+sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1) &&
 
 
-update-initramfs -c -k all
+update-initramfs -c -k all &&
 
 
-update-grub
+update-grub &&
 
 
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
---bootloader-id=$BOOTID --recheck --no-floppy --removable
+--bootloader-id=$BOOTID --recheck --no-floppy --removable &&
 
 
-mkdir /etc/zfs/zfs-list.cache
-touch /etc/zfs/zfs-list.cache/bpool
-touch /etc/zfs/zfs-list.cache/rpool
-ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
-zed -F &
+mkdir /etc/zfs/zfs-list.cache &&
+touch /etc/zfs/zfs-list.cache/bpool &&
+touch /etc/zfs/zfs-list.cache/rpool &&
+ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d &&
+echo "WAIT 5 seconds and kill zed"
+zed -F &&
 
 
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
 
 
-ROOT_DS=$(zfs list -o name | awk '/ROOT\/$RDATASET_/{print $1;exit}')
+ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
 zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
 -o canmount=on -o mountpoint=/home/$USER \
-rpool/USERDATA/$USER_$UUID
-adduser $USER
+rpool/USERDATA/"$USER"_"$UUID" &&
+adduser "$USER" &&
+echo "$USERPASS" | passwd "$USER" --stdin
 
 
-cp -a /etc/skel/. /home/$USER
-chown -R $USER:$USER /home/$USER
-usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo $USER
+cp -a /etc/skel/. /home/$USER &&
+chown -R $USER:$USER /home/$USER &&
+usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo $USER &&
 
 
-apt dist-upgrade --yes
+apt dist-upgrade --yes &&
 
 
-apt install --yes ubuntu-standard
+apt install --yes ubuntu-standard &&
 
 
 for file in /etc/logrotate.d/* ; do
@@ -102,8 +104,8 @@ for file in /etc/logrotate.d/* ; do
     fi
 done
 
-zfs snapshot bpool/BOOT/$RDATASET@install
-zfs snapshot rpool/ROOT/$RDATASET@install
+zfs snapshot bpool/BOOT/$RDATASET@install &&
+zfs snapshot rpool/ROOT/$RDATASET@install &&
 
 echo "If you've gotten this far, stop being lazy, set root password, do zed -F &"
 
