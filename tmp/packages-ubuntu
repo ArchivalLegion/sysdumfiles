@@ -6,6 +6,8 @@ breeze-cursor-theme
 build-essential
 compton
 curl
+cryptsetup
+dosfstools
 dunst
 efibootmgr
 ethtool
@@ -22,6 +24,7 @@ fonts-ubuntu
 gdisk
 geany
 grub-efi-amd64
+grub-efi-amd64-signed
 gtk2-engines*
 gvfs
 htop
@@ -29,6 +32,7 @@ icewm
 intel-microcode
 kdeconnect
 keepassxc
+linux-image-generic
 lxappearance
 mate-polkit
 mpv
@@ -53,6 +57,7 @@ rofi
 rtirq-init
 rxvt-unicode
 scrot
+shim-signed
 smartmontools
 sudo
 sxiv
