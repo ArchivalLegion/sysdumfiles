@@ -46,7 +46,7 @@ sgdisk -n4:0:0 -t4:BF00 $DISK
 
 
 sync
-ls /dev/disk/by-id/ | grep -i $DISK
+ls -l /dev/disk/by-id/
 sleep 4 &&
 
 
@@ -145,7 +145,7 @@ cp pozzed.yaml /mnt/etc/netplan/
 cp ubuntu-sources /mnt/etc/apt/sources.list
 
 
-cp plzno-part2 /mnt/root/
+cp plzno-part2.sh /mnt/root/
 
 
 cp -r etc/ /mnt/etc
