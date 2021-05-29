@@ -45,6 +45,10 @@ sgdisk -n3:0:+2G -t3:BE00 $DISK
 sgdisk -n4:0:0 -t4:BF00 $DISK
 
 
+sync
+ls /dev/disk/by-id/ | grep -i $DISK
+sleep 4 &&
+
 
 zpool create -f \
 -o cachefile=/etc/zfs/zpool.cache \
@@ -67,7 +71,7 @@ bpool $DISK-part3
 
 
 
-echo '$PASS' | zpool create -f \
+echo $PASS | zpool create -f \
 -o ashift=12 -o autotrim=on \
 -O encryption=aes-256-gcm \
 -O keylocation=prompt -O keyformat=passphrase \
