@@ -102,6 +102,8 @@ for file in /etc/logrotate.d/* ; do
     fi
 done
 
+zfs snapshot bpool/BOOT/$RDATASET@install
+zfs snapshot rpool/ROOT/$RDATASET@install
 
 echo "If you've gotten this far, stop being lazy, set root password, do zed -F &"
 
