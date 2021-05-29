@@ -36,34 +36,34 @@ sgdisk     -n4:0:0        -t4:BF00 $DISK
 
 
 zpool create \
-    -o cachefile=/etc/zfs/zpool.cache \
-    -o ashift=12 -o autotrim=on -d \
-    -o feature@async_destroy=enabled \
-    -o feature@bookmarks=enabled \
-    -o feature@embedded_data=enabled \
-    -o feature@empty_bpobj=enabled \
-    -o feature@enabled_txg=enabled \
-    -o feature@extensible_dataset=enabled \
-    -o feature@filesystem_limits=enabled \
-    -o feature@hole_birth=enabled \
-    -o feature@large_blocks=enabled \
-    -o feature@lz4_compress=enabled \
-    -o feature@spacemap_histogram=enabled \
-    -O acltype=posixacl -O canmount=off -O compression=lz4 \
-    -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
-    -O mountpoint=/boot -R /mnt \
-    bpool ${DISK}-part3
+-o cachefile=/etc/zfs/zpool.cache \
+-o ashift=12 -o autotrim=on -d \
+-o feature@async_destroy=enabled \
+-o feature@bookmarks=enabled \
+-o feature@embedded_data=enabled \
+-o feature@empty_bpobj=enabled \
+-o feature@enabled_txg=enabled \
+-o feature@extensible_dataset=enabled \
+-o feature@filesystem_limits=enabled \
+-o feature@hole_birth=enabled \
+-o feature@large_blocks=enabled \
+-o feature@lz4_compress=enabled \
+-o feature@spacemap_histogram=enabled \
+-O acltype=posixacl -O canmount=off -O compression=lz4 \
+-O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
+-O mountpoint=/boot -R /mnt \
+ bpool ${DISK}-part3
     
     
     
-    echo '$PASS' | zpool create \
-    -o ashift=12 -o autotrim=on \
-    -O encryption=aes-256-gcm \
-    -O keylocation=prompt -O keyformat=passphrase \
-    -O acltype=posixacl -O canmount=off -O compression=lz4 \
-    -O dnodesize=auto -O normalization=formD -O relatime=on \
-    -O xattr=sa -O mountpoint=/ -R /mnt \
-    rpool ${DISK}-part4
+echo '$PASS' | zpool create \
+-o ashift=12 -o autotrim=on \
+-O encryption=aes-256-gcm \
+-O keylocation=prompt -O keyformat=passphrase \
+-O acltype=posixacl -O canmount=off -O compression=lz4 \
+-O dnodesize=auto -O normalization=formD -O relatime=on \
+-O xattr=sa -O mountpoint=/ -R /mnt \
+rpool ${DISK}-part4
     
     
     
@@ -72,20 +72,20 @@ zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 
 
 zfs create -o mountpoint=/ \
-    -o com.ubuntu.zsys:bootfs=yes \
-    -o com.ubuntu.zsys:last-used=$(date +%s) rpool/ROOT/ubuntu_$UUID
+-o com.ubuntu.zsys:bootfs=yes \
+-o com.ubuntu.zsys:last-used=$(date +%s) rpool/ROOT/ubuntu_$UUID
 
 zfs create -o mountpoint=/boot bpool/BOOT/ubuntu_$UUID
 
 
 
 zfs create -o com.ubuntu.zsys:bootfs=no \
-    rpool/ROOT/ubuntu_$UUID/srv
+rpool/ROOT/ubuntu_$UUID/srv
 zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
-    rpool/ROOT/ubuntu_$UUID/usr
+rpool/ROOT/ubuntu_$UUID/usr
 zfs create rpool/ROOT/ubuntu_$UUID/usr/local
 zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
-    rpool/ROOT/ubuntu_$UUID/var
+rpool/ROOT/ubuntu_$UUID/var
 zfs create rpool/ROOT/ubuntu_$UUID/var/games
 zfs create rpool/ROOT/ubuntu_$UUID/var/lib
 zfs create rpool/ROOT/ubuntu_$UUID/var/lib/AccountsService
@@ -100,10 +100,10 @@ zfs create rpool/ROOT/ubuntu_$UUID/var/www
 
 
 zfs create -o canmount=off -o mountpoint=/ \
-    rpool/USERDATA
+rpool/USERDATA
 zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/ubuntu_$UUID \
-    -o canmount=on -o mountpoint=/root \
-    rpool/USERDATA/root_$UUID
+-o canmount=on -o mountpoint=/root \
+rpool/USERDATA/root_$UUID
 chmod 700 /mnt/root
 
 
@@ -113,7 +113,7 @@ mount -t tmpfs tmpfs /mnt/run
 mkdir /mnt/run/lock
 
 zfs create -o com.ubuntu.zsys:bootfs=no \
-    rpool/ROOT/ubuntu_$UUID/tmp
+rpool/ROOT/ubuntu_$UUID/tmp
 chmod 1777 /mnt/tmp
 
 debootstrap $RELEASE /mnt
