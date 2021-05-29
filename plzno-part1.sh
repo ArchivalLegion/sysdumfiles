@@ -52,10 +52,10 @@ zpool create \
 -O acltype=posixacl -O canmount=off -O compression=lz4 \
 -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
 -O mountpoint=/boot -R /mnt \
-bpool ${DISK}-part3
-    
-    
-    
+bpool $DISK-part3
+
+
+
 echo '$PASS' | zpool create \
 -o ashift=12 -o autotrim=on \
 -O encryption=aes-256-gcm \
@@ -63,10 +63,10 @@ echo '$PASS' | zpool create \
 -O acltype=posixacl -O canmount=off -O compression=lz4 \
 -O dnodesize=auto -O normalization=formD -O relatime=on \
 -O xattr=sa -O mountpoint=/ -R /mnt \
-rpool ${DISK}-part4
-    
-    
-    
+rpool $DISK-part4
+
+
+
 zfs create -o canmount=off -o mountpoint=none rpool/ROOT
 zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 
