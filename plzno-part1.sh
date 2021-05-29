@@ -16,6 +16,7 @@ export RDATASET=
 
 systemctl stop zed
 
+zpool export -a
 
 apt update
 
