@@ -2,11 +2,15 @@
 
 apt update
 
+
 dpkg-reconfigure locales tzdata keyboard-configuration console-setup
+
 
 apt install --yes nano
 
+
 apt install --yes dosfstools
+
 
 
 mkdosfs -F 32 -s 1 -n EFI $DISK-part1
@@ -16,9 +20,11 @@ echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) \
 mount /boot/efi
 
 
+
 mkdir /boot/efi/grub /boot/grub
 echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab
 mount /boot/grub
+
 
 
 apt install --yes \
@@ -29,7 +35,10 @@ shim-signed zfs-initramfs
 
 apt remove --purge --yes os-prober
 
+
 apt install --yes cryptsetup
+
+
 
 echo swap $DISK-part2 /dev/urandom \
 swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab
@@ -48,10 +57,11 @@ curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.
 sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1)
 
 
-
 update-initramfs -c -k all
 
+
 update-grub
+
 
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
 --bootloader-id=$BOOTID --recheck --no-floppy --removable
@@ -63,8 +73,10 @@ touch /etc/zfs/zfs-list.cache/rpool
 ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
 zed -F &
 
+
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
+
 
 ROOT_DS=$(zfs list -o name | awk '/ROOT\/ubuntu_/{print $1;exit}')
 zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
@@ -72,11 +84,14 @@ zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
 rpool/USERDATA/$USER_$UUID
 adduser $USER
 
+
 cp -a /etc/skel/. /home/$USER
 chown -R $USER:$USER /home/$USER
 usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo $USER
 
+
 apt dist-upgrade --yes
+
 
 apt install --yes ubuntu-standard
 
