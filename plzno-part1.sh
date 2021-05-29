@@ -12,47 +12,48 @@ export HOSTNAME=
 export BOOTID=
 export RELEASE=focal
 export PASS=
+export USERPASS=
 export EFILABEL=
 
-systemctl stop zed
+systemctl stop zed &&
 
 
-apt update
+apt update &&
 
 
-zpool export -a
+zpool export -a &&
 
 
-gsettings set org.gnome.desktop.media-handling automount false
+gsettings set org.gnome.desktop.media-handling automount false &&
 
 
-apt install --yes debootstrap gdisk zfs-initramfs
+apt install --yes debootstrap gdisk zfs-initramfs &&
 
 
-sgdisk --zap-all $DISK
+sgdisk --zap-all $DISK &&
 
 
-wipefs -af $DISK
+wipefs -af $DISK &&
 
 
-sgdisk -n1:1M:+128M -t1:EF00 $DISK
+sgdisk -n1:1M:+128M -t1:EF00 $DISK &&
 
 
-sgdisk -a1 -n5:24K:+1000K -t5:EF02 $DISK
+sgdisk -a1 -n5:24K:+1000K -t5:EF02 $DISK &&
 
 
-sgdisk -n2:0:+2G -t2:8200 $DISK
+sgdisk -n2:0:+2G -t2:8200 $DISK &&
 
 
-sgdisk -n3:0:+2G -t3:BE00 $DISK
+sgdisk -n3:0:+2G -t3:BE00 $DISK &&
 
 
-sgdisk -n4:0:0 -t4:BF00 $DISK
+sgdisk -n4:0:0 -t4:BF00 $DISK &&
 
 
 sync &&
 sleep 7 &&
-ls -l /dev/disk/by-id/
+ls -l /dev/disk/by-id/ &&
 
 
 zpool create -f \
@@ -91,72 +92,72 @@ zfs create -o canmount=off -o mountpoint=none rpool/ROOT
 zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 zfs create -o mountpoint=/ \
 -o com.ubuntu.zsys:bootfs=yes \
--o com.ubuntu.zsys:last-used=$(date +%s) rpool/ROOT/$RDATASET_$UUID
-zfs create -o mountpoint=/boot bpool/BOOT/$RDATASET_$UUID
+-o com.ubuntu.zsys:last-used=$(date +%s) rpool/ROOT/"$RDATASET"_"$UUID"
+zfs create -o mountpoint=/boot bpool/BOOT/"$RDATASET"_"$UUID"
 
 
 
 zfs create -o com.ubuntu.zsys:bootfs=no \
-rpool/ROOT/$RDATASET_$UUID/srv
+rpool/ROOT/"$RDATASET"_"$UUID"/srv
 zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
-rpool/ROOT/$RDATASET_$UUID/usr
-zfs create rpool/ROOT/$RDATASET_$UUID/usr/local
+rpool/ROOT/"$RDATASET"_"$UUID"/usr
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/usr/local
 zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
-rpool/ROOT/$RDATASET_$UUID/var
-zfs create rpool/ROOT/$RDATASET_$UUID/var/games
-zfs create rpool/ROOT/$RDATASET_$UUID/var/lib
-zfs create rpool/ROOT/$RDATASET_$UUID/var/lib/AccountsService
-zfs create rpool/ROOT/$RDATASET_$UUID/var/lib/apt
-zfs create rpool/ROOT/$RDATASET_$UUID/var/lib/dpkg
-zfs create rpool/ROOT/$RDATASET_$UUID/var/lib/NetworkManager
-zfs create rpool/ROOT/$RDATASET_$UUID/var/log
-zfs create rpool/ROOT/$RDATASET_$UUID/var/mail
-zfs create rpool/ROOT/$RDATASET_$UUID/var/snap
-zfs create rpool/ROOT/$RDATASET_$UUID/var/spool
-zfs create rpool/ROOT/$RDATASET_$UUID/var/www
+rpool/ROOT/"$RDATASET"_"$UUID"/var
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/games
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/AccountsService
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/apt
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/dpkg
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/NetworkManager
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/log
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/mail
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/snap
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/spool
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/www
 zfs create -o com.ubuntu.zsys:bootfs=no \
-rpool/ROOT/$RDATASET_$UUID/tmp
-chmod 1777 /mnt/tmp
+rpool/ROOT/"$RDATASET"_"$UUID"/tmp
+chmod 1777 /mnt/tmp &&
 
 
 
 zfs create -o canmount=off -o mountpoint=/ \
 rpool/USERDATA
-zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/$RDATASET_$UUID \
+zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/"$RDATASET"_"$UUID" \
 -o canmount=on -o mountpoint=/root \
-rpool/USERDATA/root_$UUID
-chmod 700 /mnt/root
+rpool/USERDATA/root_"$UUID"
+chmod 700 /mnt/root &&
 
 
 
-mkdir /mnt/run
-mount -t tmpfs tmpfs /mnt/run
-mkdir /mnt/run/lock
+mkdir /mnt/run &&
+mount -t tmpfs tmpfs /mnt/run &&
+mkdir /mnt/run/lock &&
 
 
-debootstrap $RELEASE /mnt
+debootstrap "$RELEASE" /mnt &&
 
 
-mkdir /mnt/etc/zfs
-cp /etc/zfs/zpool.cache /mnt/etc/zfs/
+mkdir /mnt/etc/zfs &&
+cp /etc/zfs/zpool.cache /mnt/etc/zfs/ &&
 
 
-echo $HOSTNAME > /mnt/etc/hostname
+echo "$HOSTNAME" > /mnt/etc/hostname
 
 
-cp pozzed.yaml /mnt/etc/netplan/
+cp pozzed.yaml /mnt/etc/netplan/ &&
 
 
-cp ubuntu-sources /mnt/etc/apt/sources.list
+cp ubuntu-sources /mnt/etc/apt/sources.list &&
 
 
-cp plzno-part2.sh /mnt/root/
+cp plzno-part2.sh /mnt/root/ &&
 
 
-cp -r etc/ /mnt/etc
+cp -r etc/ /mnt/etc &&
 
 
-mount --rbind /dev  /mnt/dev
-mount --rbind /proc /mnt/proc
-mount --rbind /sys  /mnt/sys
+mount --rbind /dev  /mnt/dev &&
+mount --rbind /proc /mnt/proc &&
+mount --rbind /sys  /mnt/sys &&
 chroot /mnt /usr/bin/env RDATASET=$RDATASET EFILABEL=$EFILABEL DISK=$DISK UUID=$UUID USER=$USER HOSTNAME=$HOSTNAME BOOTID=$BOOTID bash --login
