@@ -13,9 +13,9 @@ apt install --yes dosfstools
 
 
 
-mkdosfs -F 32 -s 1 -n EFI $DISK-part1
+mkdosfs -F 32 -s 1 -n $EFILABEL {$DISK}-part1
 mkdir /boot/efi
-echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) \
+echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part1) \
 /boot/efi vfat defaults 0 0 >> /etc/fstab
 mount /boot/efi
 
@@ -40,7 +40,7 @@ apt install --yes cryptsetup
 
 
 
-echo swap $DISK-part2 /dev/urandom \
+echo swap {$DISK}-part2 /dev/urandom \
 swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab
 echo /dev/mapper/swap none swap defaults 0 0 >> /etc/fstab
 
@@ -78,7 +78,7 @@ sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
 
 
-ROOT_DS=$(zfs list -o name | awk '/ROOT\/ubuntu_/{print $1;exit}')
+ROOT_DS=$(zfs list -o name | awk '/ROOT\/$RDATASET_/{print $1;exit}')
 zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
 -o canmount=on -o mountpoint=/home/$USER \
 rpool/USERDATA/$USER_$UUID
@@ -103,6 +103,6 @@ for file in /etc/logrotate.d/* ; do
 done
 
 
-echo 'If you've gotten this far, stop being lazy, set root password, do zed -F &'
+echo "If you've gotten this far, stop being lazy, set root password, do zed -F &"
 
-echo 'firefox https://openzfs.github.io/openzfs-docs/Getting%20Started/Ubuntu/Ubuntu%2020.04%20Root%20on%20ZFS.html#step-5-grub-installation &'
+echo "firefox https://openzfs.github.io/openzfs-docs/Getting%20Started/Ubuntu/Ubuntu%2020.04%20Root%20on%20ZFS.html#step-5-grub-installation &"
