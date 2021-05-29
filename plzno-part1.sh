@@ -5,6 +5,7 @@
 # run script as root ( sudo -i )
 
 export DISK=/dev/disk/by-id/
+export RDATASET=
 export UUID=
 export USER=
 export HOSTNAME=
@@ -12,13 +13,14 @@ export BOOTID=
 export RELEASE=focal
 export PASS=
 export EFILABEL=
-export RDATASET=
 
 systemctl stop zed
 
-zpool export -a
 
 apt update
+
+
+zpool export -a
 
 
 gsettings set org.gnome.desktop.media-handling automount false
