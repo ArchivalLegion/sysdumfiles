@@ -4,7 +4,7 @@
 # Start by modifying variable below, then
 # run script as root ( sudo -i )
 
-export DISK=
+export DISK=/dev/disk/by-id/
 export UUID=
 export USER=
 export HOSTNAME=
@@ -12,30 +12,41 @@ export BOOTID=
 export RELEASE=focal
 export PASS=
 
+systemctl stop zed
+
+
 apt update
+
 
 gsettings set org.gnome.desktop.media-handling automount false
 
-systemctl stop zed
 
 apt install --yes debootstrap gdisk zfs-initramfs
 
+
 sgdisk --zap-all $DISK
+
 
 wipefs -af $DISK
 
+
 sgdisk -n1:1M:+128M -t1:EF00 $DISK
+
 
 sgdisk -a1 -n5:24K:+1000K -t5:EF02 $DISK
 
+
 sgdisk -n2:0:+2G -t2:8200 $DISK
 
+
 sgdisk -n3:0:+2G -t3:BE00 $DISK
+
 
 sgdisk -n4:0:0 -t4:BF00 $DISK
 
 
-zpool create \
+
+zpool create -f \
 -o cachefile=/etc/zfs/zpool.cache \
 -o ashift=12 -o autotrim=on -d \
 -o feature@async_destroy=enabled \
@@ -56,7 +67,7 @@ bpool $DISK-part3
 
 
 
-echo '$PASS' | zpool create \
+echo '$PASS' | zpool create -f \
 -o ashift=12 -o autotrim=on \
 -O encryption=aes-256-gcm \
 -O keylocation=prompt -O keyformat=passphrase \
@@ -69,12 +80,9 @@ rpool $DISK-part4
 
 zfs create -o canmount=off -o mountpoint=none rpool/ROOT
 zfs create -o canmount=off -o mountpoint=none bpool/BOOT
-
-
 zfs create -o mountpoint=/ \
 -o com.ubuntu.zsys:bootfs=yes \
 -o com.ubuntu.zsys:last-used=$(date +%s) rpool/ROOT/ubuntu_$UUID
-
 zfs create -o mountpoint=/boot bpool/BOOT/ubuntu_$UUID
 
 
@@ -97,6 +105,10 @@ zfs create rpool/ROOT/ubuntu_$UUID/var/mail
 zfs create rpool/ROOT/ubuntu_$UUID/var/snap
 zfs create rpool/ROOT/ubuntu_$UUID/var/spool
 zfs create rpool/ROOT/ubuntu_$UUID/var/www
+zfs create -o com.ubuntu.zsys:bootfs=no \
+rpool/ROOT/ubuntu_$UUID/tmp
+chmod 1777 /mnt/tmp
+
 
 
 zfs create -o canmount=off -o mountpoint=/ \
@@ -112,24 +124,28 @@ mkdir /mnt/run
 mount -t tmpfs tmpfs /mnt/run
 mkdir /mnt/run/lock
 
-zfs create -o com.ubuntu.zsys:bootfs=no \
-rpool/ROOT/ubuntu_$UUID/tmp
-chmod 1777 /mnt/tmp
 
 debootstrap $RELEASE /mnt
+
 
 mkdir /mnt/etc/zfs
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/
 
+
 echo $HOSTNAME > /mnt/etc/hostname
+
 
 cp pozzed.yaml /mnt/etc/netplan/
 
+
 cp ubuntu-sources /mnt/etc/apt/sources.list
+
 
 cp plzno-part2 /mnt/root/
 
+
 cp -r etc/ /mnt/etc
+
 
 mount --rbind /dev  /mnt/dev
 mount --rbind /proc /mnt/proc
