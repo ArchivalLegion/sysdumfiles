@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Doing this by hand has crushed my soul.
-# Start by modifying variable below, then
+# Start by modifying variables below, then
 # run script as root ( sudo -i )
 
 export DISK=/dev/disk/by-id/
@@ -11,6 +11,8 @@ export HOSTNAME=
 export BOOTID=
 export RELEASE=focal
 export PASS=
+export EFILABEL=
+export RDATASET=
 
 systemctl stop zed
 
@@ -45,7 +47,7 @@ sgdisk -n3:0:+2G -t3:BE00 $DISK
 sgdisk -n4:0:0 -t4:BF00 $DISK
 
 
-sync
+sync &&
 ls -l /dev/disk/by-id/
 sleep 4 &&
 
@@ -67,9 +69,9 @@ zpool create -f \
 -O acltype=posixacl -O canmount=off -O compression=lz4 \
 -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
 -O mountpoint=/boot -R /mnt \
-bpool $DISK-part3
+bpool {$DISK}-part3
 
-
+echo "Boot pool"
 
 echo $PASS | zpool create -f \
 -o ashift=12 -o autotrim=on \
@@ -78,46 +80,46 @@ echo $PASS | zpool create -f \
 -O acltype=posixacl -O canmount=off -O compression=lz4 \
 -O dnodesize=auto -O normalization=formD -O relatime=on \
 -O xattr=sa -O mountpoint=/ -R /mnt \
-rpool $DISK-part4
+rpool {$DISK}-part4
 
-
+echo "Root pool"
 
 zfs create -o canmount=off -o mountpoint=none rpool/ROOT
 zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 zfs create -o mountpoint=/ \
 -o com.ubuntu.zsys:bootfs=yes \
--o com.ubuntu.zsys:last-used=$(date +%s) rpool/ROOT/ubuntu_$UUID
-zfs create -o mountpoint=/boot bpool/BOOT/ubuntu_$UUID
+-o com.ubuntu.zsys:last-used=$(date +%s) rpool/ROOT/$RDATASET_$UUID
+zfs create -o mountpoint=/boot bpool/BOOT/$RDATASET_$UUID
 
 
 
 zfs create -o com.ubuntu.zsys:bootfs=no \
-rpool/ROOT/ubuntu_$UUID/srv
+rpool/ROOT/$RDATASET_$UUID/srv
 zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
-rpool/ROOT/ubuntu_$UUID/usr
-zfs create rpool/ROOT/ubuntu_$UUID/usr/local
+rpool/ROOT/$RDATASET_$UUID/usr
+zfs create rpool/ROOT/$RDATASET_$UUID/usr/local
 zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
-rpool/ROOT/ubuntu_$UUID/var
-zfs create rpool/ROOT/ubuntu_$UUID/var/games
-zfs create rpool/ROOT/ubuntu_$UUID/var/lib
-zfs create rpool/ROOT/ubuntu_$UUID/var/lib/AccountsService
-zfs create rpool/ROOT/ubuntu_$UUID/var/lib/apt
-zfs create rpool/ROOT/ubuntu_$UUID/var/lib/dpkg
-zfs create rpool/ROOT/ubuntu_$UUID/var/lib/NetworkManager
-zfs create rpool/ROOT/ubuntu_$UUID/var/log
-zfs create rpool/ROOT/ubuntu_$UUID/var/mail
-zfs create rpool/ROOT/ubuntu_$UUID/var/snap
-zfs create rpool/ROOT/ubuntu_$UUID/var/spool
-zfs create rpool/ROOT/ubuntu_$UUID/var/www
+rpool/ROOT/$RDATASET_$UUID/var
+zfs create rpool/ROOT/$RDATASET_$UUID/var/games
+zfs create rpool/ROOT/$RDATASET_$UUID/var/lib
+zfs create rpool/ROOT/$RDATASET_$UUID/var/lib/AccountsService
+zfs create rpool/ROOT/$RDATASET_$UUID/var/lib/apt
+zfs create rpool/ROOT/$RDATASET_$UUID/var/lib/dpkg
+zfs create rpool/ROOT/$RDATASET_$UUID/var/lib/NetworkManager
+zfs create rpool/ROOT/$RDATASET_$UUID/var/log
+zfs create rpool/ROOT/$RDATASET_$UUID/var/mail
+zfs create rpool/ROOT/$RDATASET_$UUID/var/snap
+zfs create rpool/ROOT/$RDATASET_$UUID/var/spool
+zfs create rpool/ROOT/$RDATASET_$UUID/var/www
 zfs create -o com.ubuntu.zsys:bootfs=no \
-rpool/ROOT/ubuntu_$UUID/tmp
+rpool/ROOT/$RDATASET_$UUID/tmp
 chmod 1777 /mnt/tmp
 
 
 
 zfs create -o canmount=off -o mountpoint=/ \
 rpool/USERDATA
-zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/ubuntu_$UUID \
+zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/$RDATASET_$UUID \
 -o canmount=on -o mountpoint=/root \
 rpool/USERDATA/root_$UUID
 chmod 700 /mnt/root
@@ -154,4 +156,4 @@ cp -r etc/ /mnt/etc
 mount --rbind /dev  /mnt/dev
 mount --rbind /proc /mnt/proc
 mount --rbind /sys  /mnt/sys
-chroot /mnt /usr/bin/env DISK=$DISK UUID=$UUID USER=$USER HOSTNAME=$HOSTNAME BOOTID=$BOOTID bash --login
+chroot /mnt /usr/bin/env RDATASET=$RDATASET EFILABEL=$EFILABEL DISK=$DISK UUID=$UUID USER=$USER HOSTNAME=$HOSTNAME BOOTID=$BOOTID bash --login
