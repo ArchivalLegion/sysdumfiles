@@ -24,15 +24,15 @@ sgdisk --zap-all $DISK
 
 wipefs -af $DISK
 
-sgdisk     -n1:1M:+128M   -t1:EF00 $DISK
+sgdisk -n1:1M:+128M -t1:EF00 $DISK
 
 sgdisk -a1 -n5:24K:+1000K -t5:EF02 $DISK
 
-sgdisk     -n2:0:+2G    -t2:8200 $DISK
+sgdisk -n2:0:+2G -t2:8200 $DISK
 
-sgdisk     -n3:0:+2G      -t3:BE00 $DISK
+sgdisk -n3:0:+2G -t3:BE00 $DISK
 
-sgdisk     -n4:0:0        -t4:BF00 $DISK
+sgdisk -n4:0:0 -t4:BF00 $DISK
 
 
 zpool create \
