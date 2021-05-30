@@ -71,12 +71,12 @@ mkdir /etc/zfs/zfs-list.cache &&
 touch /etc/zfs/zfs-list.cache/bpool &&
 touch /etc/zfs/zfs-list.cache/rpool &&
 ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d &&
-echo "WAIT 5 seconds and kill zed"
-zed -F &&
+echo "WAIT 10 seconds and kill zed"
+zed -Fvf &&
 
 
-sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
-sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
+sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool &&
+sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool &&
 
 
 ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
@@ -103,8 +103,8 @@ for file in /etc/logrotate.d/* ; do
     fi
 done
 
-zfs snapshot bpool/BOOT/$RDATASET@install &&
-zfs snapshot rpool/ROOT/$RDATASET@install &&
+zfs snapshot bpool/BOOT/"$RDATASET"_"$UUID"@install &&
+zfs snapshot rpool/ROOT/"$RDATASET"_"$UUID"@install &&
 
 echo "If you've gotten this far, stop being lazy, set root password, do zed -F &"
 
