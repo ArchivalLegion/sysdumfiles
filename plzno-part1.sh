@@ -154,7 +154,7 @@ cp ubuntu-sources /mnt/etc/apt/sources.list &&
 cp plzno-part2.sh /mnt/root/ &&
 
 
-cp -r etc/ /mnt/etc &&
+cp -r etc/ /mnt/ &&
 
 
 mount --rbind /dev  /mnt/dev &&
