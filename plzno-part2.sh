@@ -84,7 +84,6 @@ zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
 -o canmount=on -o mountpoint=/home/$USER \
 rpool/USERDATA/"$USER"_"$UUID" &&
 adduser "$USER" &&
-echo "$USERPASS" | passwd "$USER" --stdin
 
 
 cp -a /etc/skel/. /home/$USER &&
