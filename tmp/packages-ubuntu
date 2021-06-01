@@ -16,7 +16,6 @@ ffmpegthumbnailer
 filezilla
 firefox
 flameshot
-flatpak
 fonts-croscore
 fonts-hack
 fonts-noto*
@@ -81,3 +80,6 @@ xserver-xorg-video-all
 youtube-dl
 zfs-initramfs
 zfsutils-linux
+wine
+winetricks
+dbus-x11
