@@ -1,6 +1,7 @@
 alsa-firmware-loaders
 alsa-utils
 amd64-microcode
+asciidoc
 bluez
 breeze-cursor-theme
 build-essential
@@ -17,9 +18,14 @@ ffmpegthumbnailer
 filezilla
 firefox
 flameshot
+fonts-cascadia-code
 fonts-croscore
+fonts-firacode
 fonts-hack
+fonts-liberation
+fonts-linuxlibertine
 fonts-noto*
+fonts-roboto
 fonts-ubuntu
 gdisk
 geany
@@ -35,13 +41,16 @@ keepassxc
 linux-image-generic
 lxappearance
 mate-polkit
+meson
 mpv
 nano
 neofetch
 network-manager
 network-manager-openvpn
+ninja-build
 nitrogen
 ntfs-3g
+openvpn
 p7zip-full
 papirus-icon-theme
 pavucontrol
@@ -51,6 +60,7 @@ pulseaudio
 pulseaudio-module-bluetooth
 pulseaudio-module-jack
 pulsemixer
+python3-pip
 qbittorrent
 qjackctl
 qt5-style-plugins
@@ -60,6 +70,7 @@ rxvt-unicode
 scrot
 shim-signed
 smartmontools
+software-properties-common
 sudo
 sxiv
 synaptic
@@ -73,6 +84,7 @@ variety
 wget
 wine
 winetricks
+wpasupplicant
 xarchiver
 xdg-dbus-proxy
 xdg-user-dirs
@@ -84,6 +96,8 @@ xscreensaver-gl
 xserver-xorg
 xserver-xorg-input-all
 xserver-xorg-video-all
+xsettingsd
 youtube-dl
 zfs-initramfs
 zfsutils-linux
+zfs-zed
