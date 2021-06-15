@@ -145,12 +145,6 @@ cp /etc/zfs/zpool.cache /mnt/etc/zfs/ &&
 echo "$HOSTNAME" > /mnt/etc/hostname
 
 
-cp pozzed.yaml /mnt/etc/netplan/ &&
-
-
-cp ubuntu-sources /mnt/etc/apt/sources.list &&
-
-
 cp plzno-part2.sh /mnt/root/ &&
 
 
