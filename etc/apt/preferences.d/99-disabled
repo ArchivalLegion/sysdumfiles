@@ -1,0 +1,11 @@
+Package: snapd
+Pin: release *
+Pin-Priority: -1
+
+Package: unattended-upgrades
+Pin: release *
+Pin-Priority: -1
+
+Package: apport
+Pin: release *
+Pin-Priority: -1
