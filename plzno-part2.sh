@@ -64,7 +64,7 @@ update-grub &&
 
 
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
---bootloader-id=$BOOTID --recheck --no-floppy --removable &&
+--bootloader-id=$BOOTID --recheck --compress=no --removable &&
 
 
 mkdir /etc/zfs/zfs-list.cache &&
