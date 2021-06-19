@@ -2,9 +2,7 @@
 
 apt update &&
 
-
 dpkg-reconfigure locales tzdata keyboard-configuration console-setup &&
-
 
 apt install --yes nano dosfstools cryptsetup curl patch ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed linux-image-generic shim-signed zfs-initramfs &&
 
@@ -14,7 +12,6 @@ mkdir /boot/efi &&
 echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) \
 /boot/efi vfat defaults 0 0 >> /etc/fstab &&
 mount /boot/efi &&
-
 
 mkdir /boot/efi/grub /boot/grub &&
 echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab &&
@@ -56,17 +53,15 @@ ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d &
 echo "Trying to automate zed" &&
 sleep 1;zed -Fvf;sleep 10;killall zed &&
 echo "zed finished" &&
-
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool &&
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool &&
-
+echo "sed ran" &&
 
 ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
 zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
 -o canmount=on -o mountpoint=/home/$USER \
-rpool/USERDATA/"$USER"_"$UUID" &&
+rpool/USERDATA/"$USER" &&
 adduser "$USER" &&
-
 
 cp -a /etc/skel/. /home/$USER &&
 chown -R $USER:$USER /home/$USER &&
