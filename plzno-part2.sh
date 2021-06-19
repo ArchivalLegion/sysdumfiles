@@ -53,10 +53,9 @@ mkdir /etc/zfs/zfs-list.cache &&
 touch /etc/zfs/zfs-list.cache/bpool &&
 touch /etc/zfs/zfs-list.cache/rpool &&
 ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d &&
-echo "WAIT 10 seconds and kill zed" &&
 echo "Trying to automate zed" &&
 sleep 1;zed -Fvf;sleep 10;killall zed &&
-
+echo "zed finished" &&
 
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool &&
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool &&
