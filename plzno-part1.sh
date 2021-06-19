@@ -131,7 +131,7 @@ zfs create -o canmount=off -o mountpoint=/ \
 rpool/USERDATA
 zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/"$RDATASET"_"$UUID" \
 -o canmount=on -o mountpoint=/root \
-rpool/USERDATA/root_"$UUID"
+rpool/USERDATA/root
 chmod 700 /mnt/root &&
 
 
