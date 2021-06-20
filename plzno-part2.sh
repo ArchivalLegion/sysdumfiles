@@ -60,7 +60,7 @@ sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool &&
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool &&
 echo "sed ran" &&
 
-ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
+ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}') &&
 zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
 -o canmount=on -o mountpoint=/home/$USER \
 rpool/USERDATA/"$USER" &&
