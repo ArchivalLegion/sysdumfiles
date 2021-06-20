@@ -37,7 +37,7 @@ export EFILABEL=FATT
 
 # Default sources is sparse
 rm /etc/apt/sources.list &&
-cp -r etc/apt/sources.list.d/ /etc/apt/sources.list.d/ &&
+cp -r etc/apt/sources.list.d/* /etc/apt/sources.list.d/ &&
 
 systemctl stop zed &&
 
@@ -48,7 +48,7 @@ zpool export -a &&
 gsettings set org.gnome.desktop.media-handling automount false &&
 
 # Uncomment for qemu-bootstrap
-# apt install --yes qemu-user-static qemu-system-arm
+# apt install --yes qemu-user-static qemu-system-arm &&
 
 apt install --yes debootstrap gdisk zfs-initramfs &&
 
