@@ -1,0 +1,9 @@
+deb http://mirror.enzu.com/ubuntu focal main restricted universe multiverse
+deb http://mirror.enzu.com/ubuntu focal-updates main restricted universe multiverse
+deb http://mirror.enzu.com/ubuntu focal-backports main restricted universe multiverse
+deb http://security.ubuntu.com/ubuntu focal-security main restricted universe multiverse
+
+deb-src http://mirror.enzu.com/ubuntu focal main restricted universe multiverse
+deb-src http://mirror.enzu.com/ubuntu focal-updates main restricted universe multiverse
+deb-src http://mirror.enzu.com/ubuntu focal-backports main restricted universe multiverse
+deb-src http://security.ubuntu.com/ubuntu focal-security main restricted universe multiverse
