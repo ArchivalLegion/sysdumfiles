@@ -26,7 +26,10 @@ echo /dev/mapper/swap none swap defaults 0 0 >> /etc/fstab &&
 addgroup --system lpadmin &&
 addgroup --system lxd &&
 addgroup --system sambashare &&
-
+addgroup --system gpio &&
+addgroup --system i2c &&
+addgroup --system input &&
+addgroup --system spi &&
 
 curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
 sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1) &&
@@ -65,7 +68,7 @@ adduser "$USER" &&
 
 cp -a /etc/skel/. /home/$USER &&
 chown -R $USER:$USER /home/$USER &&
-usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo $USER &&
+usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi $USER &&
 
 
 for file in /etc/logrotate.d/* ; do
