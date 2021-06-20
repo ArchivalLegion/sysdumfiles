@@ -111,31 +111,31 @@ zfs create -o mountpoint=/boot bpool/BOOT/"$RDATASET"_"$UUID" &&
 
 
 zfs create -o com.ubuntu.zsys:bootfs=no \
-rpool/ROOT/"$RDATASET"_"$UUID"/srv
+rpool/ROOT/"$RDATASET"_"$UUID"/srv &&
 zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
-rpool/ROOT/"$RDATASET"_"$UUID"/usr
+rpool/ROOT/"$RDATASET"_"$UUID"/usr &&
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/usr/local
 zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
-rpool/ROOT/"$RDATASET"_"$UUID"/var
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/games
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/AccountsService
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/apt
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/dpkg
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/flatpak
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/NetworkManager
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/snapd
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/log
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/mail
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/snap
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/spool
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/www
+rpool/ROOT/"$RDATASET"_"$UUID"/var &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/games &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/AccountsService &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/apt &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/dpkg &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/flatpak &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/NetworkManager &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/snapd &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/log &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/mail &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/snap &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/spool &&
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/www &&
 zfs create -o com.ubuntu.zsys:bootfs=no \
 rpool/ROOT/"$RDATASET"_"$UUID"/tmp
 chmod 1777 /mnt/tmp &&
 
 zfs create -o canmount=off -o mountpoint=/ \
-rpool/USERDATA
+rpool/USERDATA &&
 zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/"$RDATASET"_"$UUID" \
 -o canmount=on -o mountpoint=/root \
 rpool/USERDATA/root
@@ -148,7 +148,7 @@ debootstrap --arch=$ARCH "$RELEASE" /mnt &&
 mkdir /mnt/etc/zfs &&
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/ &&
 
-echo "$HOSTNAME" > /mnt/etc/hostname
+echo "$HOSTNAME" > /mnt/etc/hostname &&
 
 cp plzno-part2.sh /mnt/root/ &&
 
