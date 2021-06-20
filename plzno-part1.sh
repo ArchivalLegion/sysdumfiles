@@ -13,13 +13,16 @@ export PASS=password
 # Ubuntu / Debian release
 export RELEASE=focal
 
+# System architecture: amd64,armhf,arm64,powerpc,ppc64el,i386,s390x
+export ARCH=amd64
+
 # The dataset naming scheme
 # rpool/peanut_butter
 # ---$RDATASET_$UUID
 export RDATASET=peanut
 export UUID=butter
 
-# Username
+# Username, lowercase only
 export USER=Dauser
 
 # Computer name
@@ -47,9 +50,13 @@ sgdisk --zap-all $DISK &&
 
 wipefs -af $DISK &&
 
-sgdisk -n1:1M:+256M -t1:EF00 $DISK &&
+sgdisk -n1:1M:+256M -t1:EF00 $DISK -c1:$EFILABEL &&
 
 sgdisk -a1 -n5:0:+1000K -t5:EF02 $DISK &&
+
+#sgdisk -n6:0:+128M -t6:7F00 $DISK -c6:KERN-A &&
+#sgdisk -n7:0:+128M -t7:7F00 $DISK -c7:KERN-B &&
+#sgdisk -n8:0:+128M -t8:7F00 $DISK -c8:KERN-C &&
 
 sgdisk -n2:0:+16G -t2:8200 $DISK &&
 
@@ -135,7 +142,7 @@ rpool/USERDATA/root
 chmod 700 /mnt/root &&
 
 
-debootstrap "$RELEASE" /mnt &&
+debootstrap --arch=$ARCH "$RELEASE" /mnt &&
 
 
 mkdir /mnt/etc/zfs &&
