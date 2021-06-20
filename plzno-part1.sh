@@ -35,6 +35,10 @@ export BOOTID=ubuntu
 export EFILABEL=FATT
 
 
+# Default sources is sparse
+rm /etc/apt/sources.list &&
+cp -r etc/apt/sources.list.d/ /etc/apt/sources.list.d/ &&
+
 systemctl stop zed &&
 
 apt update &&
@@ -43,6 +47,8 @@ zpool export -a &&
 
 gsettings set org.gnome.desktop.media-handling automount false &&
 
+# Uncomment for qemu-bootstrap
+#apt install --yes qemu-user-static qemu-system-arm
 apt install --yes debootstrap gdisk zfs-initramfs &&
 
 
@@ -131,14 +137,14 @@ zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/snap &&
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/spool &&
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/www &&
 zfs create -o com.ubuntu.zsys:bootfs=no \
-rpool/ROOT/"$RDATASET"_"$UUID"/tmp
+rpool/ROOT/"$RDATASET"_"$UUID"/tmp &&
 chmod 1777 /mnt/tmp &&
 
 zfs create -o canmount=off -o mountpoint=/ \
 rpool/USERDATA &&
 zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/"$RDATASET"_"$UUID" \
 -o canmount=on -o mountpoint=/root \
-rpool/USERDATA/root
+rpool/USERDATA/root &&
 chmod 700 /mnt/root &&
 
 
@@ -150,8 +156,7 @@ cp /etc/zfs/zpool.cache /mnt/etc/zfs/ &&
 
 echo "$HOSTNAME" > /mnt/etc/hostname &&
 
-cp plzno-part2.sh /mnt/root/ &&
-
+cp plzno* /mnt/root/ &&
 cp -r etc/ /mnt/ &&
 
 
