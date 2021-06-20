@@ -48,7 +48,8 @@ zpool export -a &&
 gsettings set org.gnome.desktop.media-handling automount false &&
 
 # Uncomment for qemu-bootstrap
-#apt install --yes qemu-user-static qemu-system-arm
+# apt install --yes qemu-user-static qemu-system-arm
+
 apt install --yes debootstrap gdisk zfs-initramfs &&
 
 
@@ -60,9 +61,9 @@ sgdisk -n1:1M:+256M -t1:EF00 $DISK -c1:$EFILABEL &&
 
 sgdisk -a1 -n5:0:+1000K -t5:EF02 $DISK &&
 
-#sgdisk -n6:0:+128M -t6:7F00 $DISK -c6:KERN-A &&
-#sgdisk -n7:0:+128M -t7:7F00 $DISK -c7:KERN-B &&
-#sgdisk -n8:0:+128M -t8:7F00 $DISK -c8:KERN-C &&
+# sgdisk -n6:0:+128M -t6:7F00 $DISK -c6:KERN-A &&
+# sgdisk -n7:0:+128M -t7:7F00 $DISK -c7:KERN-B &&
+# sgdisk -n8:0:+128M -t8:7F00 $DISK -c8:KERN-C &&
 
 sgdisk -n2:0:+16G -t2:8200 $DISK &&
 
@@ -164,3 +165,7 @@ mount --rbind /dev  /mnt/dev &&
 mount --rbind /proc /mnt/proc &&
 mount --rbind /sys  /mnt/sys &&
 chroot /mnt /usr/bin/env RELEASE=$RELEASE RDATASET=$RDATASET EFILABEL=$EFILABEL DISK=$DISK UUID=$UUID USER=$USER HOSTNAME=$HOSTNAME BOOTID=$BOOTID bash --login
+
+# Uncomment for qemu emulation
+# cp /usr/bin/qemu-arm-static /mnt/usr/bin/ &&
+# chroot /mnt qemu-arm-static /usr/bin/env RELEASE=$RELEASE RDATASET=$RDATASET EFILABEL=$EFILABEL DISK=$DISK UUID=$UUID USER=$USER HOSTNAME=$HOSTNAME BOOTID=$BOOTID bash --login
