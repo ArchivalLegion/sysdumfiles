@@ -10,17 +10,19 @@ apt install --yes nano dosfstools cryptsetup curl patch ubuntu-standard grub-efi
 echo "Format EFI partition and bind /boot/efi/grub" && {
 mkdosfs -F 32 -n "$EFILABEL" "$DISK"-part1
 mkdir /boot/efi
-echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) /boot/efi vfat defaults 0 0 >> /etc/fstab
+}
+echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) /boot/efi vfat defaults 0 0 >> /etc/fstab && {
 mount /boot/efi
 mkdir /boot/efi/grub /boot/grub
-echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab
+}
+echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab && {
 mount /boot/grub
 }
 
-echo "Encrypt swap partition" && {
+echo "Encrypt swap partition"
 echo swap $DISK-part2 /dev/urandom swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab
 echo /dev/mapper/swap none swap defaults 0 0 >> /etc/fstab
-}
+
 
 echo "Adding system groups" && {
 addgroup --system lpadmin
@@ -37,7 +39,7 @@ curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.
 sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1)
 }
 
-echo "Updating kernel images and install GRUB" && {
+echo "Rebuild kernel images and install GRUB" && {
 update-initramfs -c -k all
 update-grub
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
@@ -46,24 +48,24 @@ grub-install --target=x86_64-efi --efi-directory=/boot/efi \
 --bootloader-id=$BOOTID --recheck --compress=no --removable
 }
 
-echo "Fix filesystem mount ordering" && {
+echo "Copy zfs cache" && {
 mkdir /etc/zfs/zfs-list.cache
 touch /etc/zfs/zfs-list.cache/bpool
 touch /etc/zfs/zfs-list.cache/rpool
 ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
-echo "Running zed"
-timeout -s 15 -k 10 zed -F
-echo "zed killed"
+}
+echo "Running zed" && {
+timeout -s 15 -k 10 zed -F || true
+}
+echo "Fixing filesystem mounts" && {
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
-echo "sed ran"
 }
+echo "sed finished"
 
 echo "Create user dataset" && {
 ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
-zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
--o canmount=on -o mountpoint=/home/$USER \
-rpool/USERDATA/"$USER"
+zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS -o canmount=on -o mountpoint=/home/$USER rpool/USERDATA/"$USER"
 adduser "$USER"
 }
 
