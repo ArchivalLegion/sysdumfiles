@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# set -xv
 
 echo "Update package index, setup system, and install needed packages" && {
 apt update
@@ -9,10 +10,10 @@ apt install --yes nano dosfstools cryptsetup curl patch ubuntu-standard grub-efi
 
 echo "Format EFI partition and bind /boot/efi/grub" && {
 mkdosfs -F 32 -n "$EFILABEL" "$DISK"-part1
-mkdir /boot/efi
+mkdir /boot/efi || true
 echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) /boot/efi vfat defaults 0 0 >> /etc/fstab
 mount /boot/efi
-mkdir /boot/efi/grub /boot/grub
+mkdir /boot/efi/grub /boot/grub || true
 echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab
 mount /boot/grub
 }
@@ -47,9 +48,9 @@ grub-install --target=x86_64-efi --efi-directory=/boot/efi \
 }
 
 echo "Copy zfs cache" && {
-mkdir /etc/zfs/zfs-list.cache
-touch /etc/zfs/zfs-list.cache/bpool
-touch /etc/zfs/zfs-list.cache/rpool
+mkdir /etc/zfs/zfs-list.cache || true
+touch /etc/zfs/zfs-list.cache/bpool || true
+touch /etc/zfs/zfs-list.cache/rpool || true
 ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
 echo "Running zed" && {
 timeout -s 15 -k 10 zed -F || true
