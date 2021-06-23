@@ -145,6 +145,7 @@ echo "$HOSTNAME" > /mnt/etc/hostname
 echo "Copying system config and scripts into target system" && {
 cp plzno* /mnt/root/
 cp -r etc/ /mnt/
+cp -r tmp/ /mnt/
 }
 
 echo "Chrooting into install" && {
