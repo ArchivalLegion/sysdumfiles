@@ -12,9 +12,11 @@ echo "Format EFI partition and bind /boot/efi/grub" && {
 mkdosfs -F 32 -n "$EFILABEL" "$DISK"-part1
 mkdir /boot/efi || true
 echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) /boot/efi vfat defaults 0 0 >> /etc/fstab
+sync
 mount /boot/efi
 mkdir /boot/efi/grub /boot/grub || true
 echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab
+sync
 mount /boot/grub
 }
 
@@ -51,9 +53,10 @@ echo "Copy zfs cache" && {
 mkdir /etc/zfs/zfs-list.cache || true
 touch /etc/zfs/zfs-list.cache/bpool || true
 touch /etc/zfs/zfs-list.cache/rpool || true
-ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
+ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d || true
+}
 echo "Running zed" && {
-timeout -s 15 -k 10 zed -F || true
+timeout -s 15 -k 15 15 zed -FZvf || true
 echo "Fixing filesystem mounts"
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
