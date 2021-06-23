@@ -57,8 +57,7 @@ sgdisk -n3:0:+4G -t3:BE00 $DISK -c3:BPOOL
 sgdisk -n4:0:0 -t4:BF00 $DISK -c4:RPOOL
 }
 echo "Waiting for partition symlinks to update" && {
-udevadm settle --timeout 7 || true
-ls -l /dev/disk/by-id/ | grep -i "$DISK" -
+sleep 7
 }
 
 echo "Creating bpool" && {
