@@ -56,6 +56,9 @@ touch /etc/zfs/zfs-list.cache/rpool || true
 ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d || true
 }
 echo "Running zed" && {
+killall zed || true
+zfs set canmount=on bpool/BOOT/"$RDATASET_"$UUID"
+zfs set canmount=on rpool/ROOT/"$RDATASET"_$UUID"
 timeout -s 15 -k 15 15 zed -FZvf || true
 echo "Fixing filesystem mounts"
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
@@ -65,14 +68,14 @@ echo "sed finished"
 
 echo "Create user dataset" && {
 ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
-zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS -o canmount=on -o mountpoint=/home/$USER rpool/USERDATA/"$USER"
+zfs create -o com.ubuntu.zsys:bootfs-datasets="$ROOT_DS" -o canmount=on -o mountpoint=/home/"$USER" rpool/USERDATA/"$USER"
 adduser "$USER"
 }
 
-echo "Copy skeleton to new user" && {
-cp -a /etc/skel/. /home/$USER
-chown -R $USER:$USER /home/$USER
-usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi $USER
+echo "Add user to various groups" && {
+cp -rT /etc/skel/ /home/"$USER"
+chown -R "$USER":"$USER" /home/"$USER"
+usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi "$USER"
 }
 
 echo "Disable log compression" && {
