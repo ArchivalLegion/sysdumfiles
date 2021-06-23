@@ -41,7 +41,7 @@ zpool export -a
 }
 
 echo "Setting mirrors and installing tools" && {
-rm /etc/apt/sources.list
+rm /etc/apt/sources.list || true
 cp -r etc/apt/sources.list.d/* /etc/apt/sources.list.d/
 apt update
 apt install --yes debootstrap gdisk zfs-initramfs
@@ -56,7 +56,8 @@ sgdisk -n2:0:+16G -t2:8200 $DISK -c2:SWAP
 sgdisk -n3:0:+4G -t3:BE00 $DISK -c3:BPOOL
 sgdisk -n4:0:0 -t4:BF00 $DISK -c4:RPOOL
 sync
-echo "sleeping for 7 seconds";sleep 7
+echo "sleeping for 7 seconds"
+udevadm settle --timeout 7 || true
 ls -l /dev/disk/by-id | grep -i $DISK
 }
 
