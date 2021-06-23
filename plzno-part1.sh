@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-#set -xv
+# set -xv
 # Doing this by hand has crushed my soul.
 # Modify variables below,then run script as root
 
@@ -55,8 +55,7 @@ sgdisk -a1 -n5:0:+1000K -t5:EF02 $DISK -c5:LEGACY_BOOT
 sgdisk -n2:0:+16G -t2:8200 $DISK -c2:SWAP
 sgdisk -n3:0:+4G -t3:BE00 $DISK -c3:BPOOL
 sgdisk -n4:0:0 -t4:BF00 $DISK -c4:RPOOL
-}
-echo "Waiting for partition symlinks to update" && {
+echo "Waiting for partition symlinks to update"
 sleep 7
 }
 
@@ -134,7 +133,7 @@ debootstrap --arch=$ARCH "$RELEASE" /mnt
 }
 
 echo "Copying zfs cache" && {
-mkdir /mnt/etc/zfs
+mkdir /mnt/etc/zfs || true
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/
 }
 
@@ -152,7 +151,5 @@ echo "Chrooting into install" && {
 mount --rbind /dev  /mnt/dev
 mount --rbind /proc /mnt/proc
 mount --rbind /sys  /mnt/sys
-chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash --login
+chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash
 }
-
-echo "Welcome! System chrooted"
