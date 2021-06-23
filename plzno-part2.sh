@@ -59,16 +59,19 @@ sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
 echo "sed ran"
 }
 
-ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}') &&
+echo "Create user dataset" && {
+ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
 zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
 -o canmount=on -o mountpoint=/home/$USER \
-rpool/USERDATA/"$USER" &&
-adduser "$USER" &&
+rpool/USERDATA/"$USER"
+adduser "$USER"
+}
 
-cp -a /etc/skel/. /home/$USER &&
-chown -R $USER:$USER /home/$USER &&
-usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi $USER &&
-
+echo "Copy skeleton to new user" && {
+cp -a /etc/skel/. /home/$USER
+chown -R $USER:$USER /home/$USER
+usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi $USER
+}
 
 for file in /etc/logrotate.d/* ; do
     if grep -Eq "(^|[^#y])compress" "$file" ; then
