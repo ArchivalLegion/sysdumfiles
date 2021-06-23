@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
+#set -xv
 # Doing this by hand has crushed my soul.
 # Modify variables below,then run script as root
 
@@ -58,7 +58,7 @@ sgdisk -n4:0:0 -t4:BF00 $DISK -c4:RPOOL
 }
 echo "Waiting for partition symlinks to update" && {
 udevadm settle --timeout 7 || true
-ls -l /dev/disk/by-id | grep -i $DISK
+ls -l /dev/disk/by-id/ | grep -i "$DISK" -
 }
 
 echo "Creating bpool" && {
@@ -139,8 +139,9 @@ mkdir /mnt/etc/zfs
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/
 }
 
-echo "Setting hostname"
+echo "Setting hostname" && {
 echo "$HOSTNAME" > /mnt/etc/hostname
+}
 
 echo "Copying system config and scripts into target system" && {
 cp plzno* /mnt/root/
