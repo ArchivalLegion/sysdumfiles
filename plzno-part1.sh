@@ -55,6 +55,8 @@ sgdisk -a1 -n5:0:+1000K -t5:EF02 $DISK -c5:LEGACY_BOOT
 sgdisk -n2:0:+16G -t2:8200 $DISK -c2:SWAP
 sgdisk -n3:0:+4G -t3:BE00 $DISK -c3:BPOOL
 sgdisk -n4:0:0 -t4:BF00 $DISK -c4:RPOOL
+}
+echo "Waiting for partition symlinks to update" && {
 udevadm settle --timeout 7 || true
 ls -l /dev/disk/by-id | grep -i $DISK
 }
