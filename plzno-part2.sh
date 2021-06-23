@@ -57,9 +57,9 @@ ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d |
 }
 echo "Running zed" && {
 killall zed || true
-zfs set canmount=on bpool/BOOT/"$RDATASET_"$UUID"
-zfs set canmount=on rpool/ROOT/"$RDATASET"_$UUID"
-timeout -s 15 -k 15 15 zed -FZvf || true
+zfs set canmount=on bpool/BOOT/"$RDATASET"_"$UUID"
+zfs set canmount=on rpool/ROOT/"$RDATASET"_"$UUID"
+timeout -s 15 -k 15 15 zed -F
 echo "Fixing filesystem mounts"
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
