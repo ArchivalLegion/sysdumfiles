@@ -55,8 +55,6 @@ sgdisk -a1 -n5:0:+1000K -t5:EF02 $DISK -c5:LEGACY_BOOT
 sgdisk -n2:0:+16G -t2:8200 $DISK -c2:SWAP
 sgdisk -n3:0:+4G -t3:BE00 $DISK -c3:BPOOL
 sgdisk -n4:0:0 -t4:BF00 $DISK -c4:RPOOL
-sync
-echo "sleeping for 7 seconds"
 udevadm settle --timeout 7 || true
 ls -l /dev/disk/by-id | grep -i $DISK
 }
@@ -139,9 +137,8 @@ mkdir /mnt/etc/zfs
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/
 }
 
-echo "Setting hostname" && {
+echo "Setting hostname"
 echo "$HOSTNAME" > /mnt/etc/hostname
-}
 
 echo "Copying system config and scripts into target system" && {
 cp plzno* /mnt/root/
@@ -154,5 +151,6 @@ mount --rbind /dev  /mnt/dev
 mount --rbind /proc /mnt/proc
 mount --rbind /sys  /mnt/sys
 chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash --login
-echo "Welcome to the chroot!"
 }
+
+echo "Welcome! System chrooted"
