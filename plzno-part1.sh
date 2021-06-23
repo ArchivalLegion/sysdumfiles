@@ -82,6 +82,7 @@ bpool $DISK-part3
 
 echo "Creating rpool" && {
 echo $PASS | zpool create -f \
+-o cachefile=/etc/zfs/zpool.cache \
 -o ashift=12 -o autotrim=on \
 -O encryption=aes-256-gcm -O keylocation=prompt -O keyformat=passphrase \
 -O acltype=posixacl -O canmount=off -O compression=lz4 \
