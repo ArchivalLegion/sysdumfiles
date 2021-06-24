@@ -44,7 +44,7 @@ echo "Setting mirrors and installing tools" && {
 rm /etc/apt/sources.list || true
 cp -r etc/apt/sources.list.d/* /etc/apt/sources.list.d/
 apt update
-apt install --yes debootstrap gdisk zfs-initramfs
+apt install -yq debootstrap gdisk zfs-initramfs
 }
 
 echo "Wiping and partitioning drive" && {
@@ -86,6 +86,7 @@ zpool create -f \
 -O mountpoint=/boot \
 -R /mnt \
 bpool $DISK-part3
+echo "bpool done"
 }
 
 echo "Creating rpool" && {
@@ -104,6 +105,7 @@ echo $PASS | zpool create -f \
 -O mountpoint=/ \
 -R /mnt \
 rpool $DISK-part4
+echo "rpool done"
 }
 
 echo "Create filesystem datasets to act as containers" && {
@@ -116,7 +118,7 @@ zfs create -o mountpoint=/ -o com.ubuntu.zsys:bootfs=yes -o com.ubuntu.zsys:last
 zfs create -o mountpoint=/boot bpool/BOOT/"$RDATASET"_"$UUID"
 }
 
-echo "Create more sub datasets" && {
+echo "Create sub datasets" && {
 zfs create -o com.ubuntu.zsys:bootfs=no rpool/ROOT/"$RDATASET"_"$UUID"/srv
 zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off rpool/ROOT/"$RDATASET"_"$UUID"/usr
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/usr/local
@@ -138,32 +140,32 @@ zfs create -o com.ubuntu.zsys:bootfs=no rpool/ROOT/"$RDATASET"_"$UUID"/tmp
 chmod 1777 /mnt/tmp
 }
 
-echo "Create root user's dataset" && {
+echo "Create root's dataset" && {
 zfs create -o canmount=off -o mountpoint=/ rpool/USERDATA
 zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/"$RDATASET"_"$UUID" -o canmount=on -o mountpoint=/root rpool/USERDATA/root
 chmod 700 /mnt/root
 }
 
-echo "Creating base system" && {
+echo "Populating target system" && {
 debootstrap --arch="$ARCH" "$RELEASE" /mnt
 }
 
-echo "Copying zfs cache" && {
+echo "Copying host zfs cache" && {
 mkdir /mnt/etc/zfs || true
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/
 }
 
-echo "Setting hostname" && {
+echo "Setting target hostname" && {
 echo "$HOSTNAME" > /mnt/etc/hostname
 }
 
-echo "Copying system config and scripts into target system" && {
+echo "Copying system configs into target system" && {
 cp plzno* /mnt/root/
 cp -r etc/ /mnt/
 cp -r tmp/ /mnt/
 }
 
-echo "Chrooting into install" && {
+echo "Chrooting into new system" && {
 mount --rbind /dev  /mnt/dev
 mount --rbind /proc /mnt/proc
 mount --rbind /sys  /mnt/sys
