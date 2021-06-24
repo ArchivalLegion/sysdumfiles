@@ -145,7 +145,7 @@ chmod 700 /mnt/root
 }
 
 echo "Creating base system" && {
-debootstrap --arch=$ARCH "$RELEASE" /mnt
+debootstrap --arch="$ARCH" "$RELEASE" /mnt
 }
 
 echo "Copying zfs cache" && {
