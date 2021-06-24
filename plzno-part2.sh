@@ -5,7 +5,7 @@ set -euo pipefail
 echo "Update package index, setup system, and install needed packages" && {
 apt update
 dpkg-reconfigure locales tzdata keyboard-configuration console-setup
-apt install --yes nano dosfstools cryptsetup curl patch ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed linux-image-generic shim-signed zfs-initramfs
+apt install -yq nano dosfstools cryptsetup curl patch ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed linux-image-generic shim-signed zfs-initramfs
 }
 
 echo "Format EFI partition and bind /boot/efi/grub" && {
@@ -66,30 +66,40 @@ for file in /etc/logrotate.d/* ; do
 done
 }
 
-echo "Run zed -f & and uncomment script below"
-
-: '
-echo "Create zfs cache" && {
+echo "Making sure zfs sercvies are enabled" && {
+systemctl enable zfs-import-cache
+systemctl enable zfs-import.target
+systemctl enable zfs-zed.service
+systemctl enable zfs.target
+systemctl start zfs-zed.service
+}
+echo "Create zfs cache dir" && {
+ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d || true
 mkdir /etc/zfs/zfs-list.cache || true
 touch /etc/zfs/zfs-list.cache/bpool || true
 touch /etc/zfs/zfs-list.cache/rpool || true
-ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d || true
+}
+echo "Trigger cache refresh" && {
+zfs set canmount=off bpool/BOOT/"$RDATASET"_"$UUID"
+zfs set canmount=off rpool/ROOT/"$RDATASET"_"$UUID"
+zfs set canmount=on bpool/BOOT/"$RDATASET"_"$UUID"
+zfs set canmount=on rpool/ROOT/"$RDATASET"_"$UUID"
 }
 echo "Terminate zed" && {
 killall zed || true
 }
-echo "Execute the code below to finish" && {
-zfs set canmount=on bpool/BOOT/"$RDATASET"_"$UUID"
-zfs set canmount=on rpool/ROOT/"$RDATASET"_"$UUID"
-echo "Fixing filesystem mounts"
+echo "Running zed and waiting" && {
+timeout -s 15 -k 15 15 zed -F || true
+}
+echo "Fixing filesystem mounts" && {
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
 echo "sed finished"
-echo "Finished! Enjoy the system"
 }
 
 echo "Create inital system snapshot" && {
 zfs snapshot bpool/BOOT/"$RDATASET"_"$UUID"@bpool_install
 zfs snapshot rpool/ROOT/"$RDATASET"_"$UUID"@rpool_install
 }
-'
+
+echo "Finished! Enjoy the system"
