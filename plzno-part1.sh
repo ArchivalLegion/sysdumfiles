@@ -1,36 +1,28 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # set -xv
-# Doing this by hand has crushed my soul.
-# Modify variables below,then run script as root
+
+# Modify variables below, run script as root
 
 # Select the target disk
-export DISK=/dev/disk/by-id/
-
+DISK=/dev/disk/by-id/
 # Encryption password
 PASS=password
-
 # Ubuntu / Debian release for debootstrap
 RELEASE=focal
-
 # System architecture: amd64,armhf,arm64,powerpc,ppc64el,i386,s390x
 ARCH=amd64
-
 # The dataset naming scheme: rpool/peanut_butter
-export RDATASET=peanut
-export UUID=butter
-
+RDATASET=peanut
+UUID=butter
 # Username, lowercase only
-export USER=dauser
-
+USER=dauser
 # Computer hostname
 HOSTNAME=ArchivalLegion
-
 # GRUB bootloader id
-export BOOTID=ubuntu
-
+BOOTID=ubuntu
 # Name of the EFI/FAT partition
-export EFILABEL=FATT
+EFILABEL=FATT
 
 
 echo "Disabling automount and stopping zed" && {
@@ -160,7 +152,7 @@ echo "$HOSTNAME" > /mnt/etc/hostname
 }
 
 echo "Copying system configs into target system" && {
-cp plzno* /mnt/root/
+cp plzno-part2.sh /mnt/root/
 cp -r etc/ /mnt/
 cp -r tmp/ /mnt/
 }
@@ -169,5 +161,5 @@ echo "Chrooting into new system" && {
 mount --rbind /dev  /mnt/dev
 mount --rbind /proc /mnt/proc
 mount --rbind /sys  /mnt/sys
-chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash
+chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash /root/plzno-part2.sh
 }
