@@ -61,8 +61,10 @@ sleep 7
 
 echo "Creating bpool" && {
 zpool create -f \
+-d \
 -o cachefile=/etc/zfs/zpool.cache \
--o ashift=12 -o autotrim=on -d \
+-o ashift=12 \
+-o autotrim=on \
 -o feature@async_destroy=enabled \
 -o feature@bookmarks=enabled \
 -o feature@embedded_data=enabled \
@@ -74,20 +76,33 @@ zpool create -f \
 -o feature@large_blocks=enabled \
 -o feature@lz4_compress=enabled \
 -o feature@spacemap_histogram=enabled \
--O acltype=posixacl -O canmount=off -O compression=lz4 \
--O devices=off -O normalization=formD -O atime=off -O xattr=sa \
--O mountpoint=/boot -R /mnt \
+-O acltype=posixacl \
+-O canmount=off \
+-O compression=lz4 \
+-O devices=off \
+-O normalization=formD \
+-O atime=off \
+-O xattr=sa \
+-O mountpoint=/boot \
+-R /mnt \
 bpool $DISK-part3
 }
 
 echo "Creating rpool" && {
 echo $PASS | zpool create -f \
 -o cachefile=/etc/zfs/zpool.cache \
--o ashift=12 -o autotrim=on \
+-o ashift=12 \
+-o autotrim=on \
 -O encryption=aes-256-gcm -O keylocation=prompt -O keyformat=passphrase \
--O acltype=posixacl -O canmount=off -O compression=lz4 \
--O dnodesize=auto -O normalization=formD -O atime=off -O xattr=sa \
--O mountpoint=/ -R /mnt \
+-O acltype=posixacl \
+-O canmount=off \
+-O compression=lz4 \
+-O dnodesize=auto \
+-O normalization=formD \
+-O atime=off \
+-O xattr=sa \
+-O mountpoint=/ \
+-R /mnt \
 rpool $DISK-part4
 }
 
