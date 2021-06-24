@@ -49,7 +49,7 @@ grub-install --target=x86_64-efi --efi-directory=/boot/efi \
 --bootloader-id=$BOOTID --recheck --compress=no --removable
 }
 
-echo "Copy zfs cache" && {
+echo "Create zfs cache" && {
 mkdir /etc/zfs/zfs-list.cache || true
 touch /etc/zfs/zfs-list.cache/bpool || true
 touch /etc/zfs/zfs-list.cache/rpool || true
@@ -57,6 +57,8 @@ ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d |
 }
 echo "Running zed" && {
 killall zed || true
+zfs set cachefile= bpool
+zfs set cachefile= rpool
 zfs set canmount=on bpool/BOOT/"$RDATASET"_"$UUID"
 zfs set canmount=on rpool/ROOT/"$RDATASET"_"$UUID"
 timeout -s 15 -k 15 15 zed -F
