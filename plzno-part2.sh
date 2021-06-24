@@ -53,12 +53,9 @@ echo "Create user dataset" && {
 ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
 zfs create -o com.ubuntu.zsys:bootfs-datasets="$ROOT_DS" -o canmount=on -o mountpoint=/home/"$USER" rpool/USERDATA/"$USER"
 adduser "$USER"
-}
-
-echo "Add user to various groups" && {
 cp -rT /etc/skel/ /home/"$USER"
-chown -R "$USER":"$USER" /home/"$USER"
 usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi "$USER"
+chown -R "$USER":"$USER" /home/"$USER"
 }
 
 echo "Disable log compression" && {
