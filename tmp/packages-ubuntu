@@ -32,7 +32,7 @@ fonts-firacode
 fonts-hack
 fonts-liberation
 fonts-linuxlibertine
-fonts-noto*
+fonts-noto
 fonts-roboto
 fonts-ubuntu
 gcc-multilib
@@ -43,7 +43,7 @@ g++-multilib
 grub-efi-amd64
 grub-efi-amd64-signed
 gstreamer1.0-pulseaudio
-gtk2-engines*
+gtk2-engines
 gvfs
 htop
 icewm
