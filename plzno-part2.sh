@@ -81,8 +81,6 @@ touch /etc/zfs/zfs-list.cache/bpool
 touch /etc/zfs/zfs-list.cache/rpool
 }
 echo "Trigger cache refresh" && {
-zfs set canmount=off bpool/BOOT/"$RDATASET"_"$UUID"
-zfs set canmount=off rpool/ROOT/"$RDATASET"_"$UUID"
 zfs set canmount=on bpool/BOOT/"$RDATASET"_"$UUID"
 zfs set canmount=on rpool/ROOT/"$RDATASET"_"$UUID"
 }
