@@ -60,12 +60,13 @@ chown -R "$USER":"$USER" /home/"$USER"
 
 echo "Disable log compression" && {
 for file in /etc/logrotate.d/* ; do
-    if grep -Eq "(^|[^#y])compress" "$file" ; then
-        sed -i -r "s/(^|[^#y])(compress)/\1#\2/" "$file"
-    fi
+  if grep -Eq "(^|[^#y])compress" "$file" ; then
+      sed -i -r "s/(^|[^#y])(compress)/\1#\2/" "$file"
+  fi
 done
 }
 
+set +e
 echo "Making sure zfs sercvies are enabled" && {
 systemctl enable zfs-import-cache
 systemctl enable zfs-import.target
@@ -74,10 +75,10 @@ systemctl enable zfs.target
 systemctl start zfs-zed.service
 }
 echo "Create zfs cache dir" && {
-ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d || true
-mkdir /etc/zfs/zfs-list.cache || true
-touch /etc/zfs/zfs-list.cache/bpool || true
-touch /etc/zfs/zfs-list.cache/rpool || true
+ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
+mkdir /etc/zfs/zfs-list.cache
+touch /etc/zfs/zfs-list.cache/bpool
+touch /etc/zfs/zfs-list.cache/rpool
 }
 echo "Trigger cache refresh" && {
 zfs set canmount=off bpool/BOOT/"$RDATASET"_"$UUID"
@@ -86,16 +87,17 @@ zfs set canmount=on bpool/BOOT/"$RDATASET"_"$UUID"
 zfs set canmount=on rpool/ROOT/"$RDATASET"_"$UUID"
 }
 echo "Terminate zed" && {
-killall zed || true
+killall zed
 }
 echo "Running zed and waiting" && {
-timeout -s 15 -k 15 15 zed -F || true
+timeout -s 15 -k 15 15 zed -F
 }
 echo "Fixing filesystem mounts" && {
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
 echo "sed finished"
 }
+set -e
 
 echo "Create inital system snapshot" && {
 zfs snapshot bpool/BOOT/"$RDATASET"_"$UUID"@bpool_install
