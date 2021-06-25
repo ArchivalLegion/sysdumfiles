@@ -1,6 +1,8 @@
+alsa-base
 alsa-firmware-loaders
 alsa-utils
 aria2
+bc
 breeze-cursor-theme
 bsdutils
 compton
@@ -25,6 +27,7 @@ fonts-roboto
 fonts-ubuntu
 geany
 git
+gstreamer1.0-alsa
 gstreamer1.0-pulseaudio
 gtk2-engines
 gvfs
@@ -56,6 +59,7 @@ python3-pip
 qbittorrent
 qjackctl
 qt5-style-plugins
+rfkill
 rtirq-init
 rxvt-unicode
 scrot
@@ -73,6 +77,7 @@ unar
 vainfo
 variety
 wget
+wireless-tools
 wpasupplicant
 xarchiver
 xdg-dbus-proxy
@@ -86,4 +91,6 @@ xserver-xorg
 xserver-xorg-input-all
 xserver-xorg-video-all
 xsettingsd
+yaru-theme-sound
 youtube-dl
+zenity
