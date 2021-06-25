@@ -72,7 +72,7 @@ systemctl enable zfs-import-cache
 systemctl enable zfs-import.target
 systemctl enable zfs-zed.service
 systemctl enable zfs.target
-systemctl start zfs-zed.service
+systemctl enable zfs-zed.service
 }
 echo "Create zfs cache dir" && {
 ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
