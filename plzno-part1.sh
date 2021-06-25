@@ -161,5 +161,5 @@ echo "Chrooting into new system" && {
 mount --rbind /dev  /mnt/dev
 mount --rbind /proc /mnt/proc
 mount --rbind /sys  /mnt/sys
-chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash /root/plzno-part2.sh
+chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash --login
 }
