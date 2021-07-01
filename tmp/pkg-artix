@@ -1,11 +1,9 @@
-adobe-source-code-pro-fonts
 alsa-card-profiles
 alsa-firmware
 alsa-utils
 base
 base-devel
 bc
-cmst
 crda
 cryptsetup
 device-mapper
@@ -15,7 +13,6 @@ dracut
 dunst
 efibootmgr
 ethtool
-file-roller
 ffmpegthumbnailer
 geany
 git
@@ -46,10 +43,6 @@ lvm2
 mesa-demos
 mpv
 nano
-nautilus
-nautilus-image-converter
-nautilus-share
-nautilus-terminal
 nitrogen
 noto-fonts
 noto-fonts-cjk
@@ -61,7 +54,7 @@ papirus-icon-theme
 pavucontrol
 pianobar
 picom
-polkit-gnome
+polkit-mate
 poppler-glib
 pulseaudio
 pulseaudio-alsa
@@ -73,11 +66,9 @@ raw-thumbnailer
 rtirq
 rxvt-unicode
 scrot
-sed
 smartmontools
 streamlink
 sudo
-sushi
 sxiv
 tlp
 tmux
