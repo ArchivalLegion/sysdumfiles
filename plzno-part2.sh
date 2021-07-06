@@ -40,8 +40,7 @@ curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.
 sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1)
 }
 
-echo "Rebuild kernel images and install GRUB" && {
-update-initramfs -c -k all
+echo "Install GRUB" && {
 update-grub
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
 --bootloader-id=$BOOTID --recheck --compress=no
@@ -54,7 +53,7 @@ ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
 zfs create -o com.ubuntu.zsys:bootfs-datasets="$ROOT_DS" -o canmount=on -o mountpoint=/home/"$USER" rpool/USERDATA/"$USER"
 adduser "$USER"
 cp -rT /etc/skel/ /home/"$USER"
-usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi "$USER"
+usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi,audio "$USER"
 chown -R "$USER":"$USER" /home/"$USER"
 }
 
@@ -89,6 +88,9 @@ killall zed
 }
 echo "Running zed and waiting" && {
 timeout -s 15 -k 15 15 zed -F
+killall zed
+timeout -s 15 -k 15 15 zed -F
+killall zed
 }
 echo "Fixing filesystem mounts" && {
 sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/bpool
