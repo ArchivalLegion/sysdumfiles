@@ -13,6 +13,7 @@ mkdosfs -F 32 -n "$EFILABEL" "$DISK"-part1
 mkdir /boot/efi || true
 echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) /boot/efi vfat defaults 0 0 >> /etc/fstab
 sync
+sleep 3
 mount /boot/efi
 mkdir /boot/efi/grub /boot/grub || true
 echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab
@@ -33,6 +34,7 @@ addgroup --system gpio
 addgroup --system i2c
 addgroup --system input
 addgroup --system spi
+addgroup --system wheel
 }
 
 echo "Patch a dependency loop" && {
@@ -51,10 +53,8 @@ grub-install --target=x86_64-efi --efi-directory=/boot/efi \
 echo "Create user dataset" && {
 ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
 zfs create -o com.ubuntu.zsys:bootfs-datasets="$ROOT_DS" -o canmount=on -o mountpoint=/home/"$USER" rpool/USERDATA/"$USER"
-adduser "$USER"
-cp -rT /etc/skel/ /home/"$USER"
-usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi,audio "$USER"
-chown -R "$USER":"$USER" /home/"$USER"
+useradd -m -s /bin/bash "$USER"
+usermod -aG adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi,audio,wheel "$USER"
 }
 
 echo "Disable log compression" && {
