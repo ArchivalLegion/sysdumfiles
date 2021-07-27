@@ -10,4 +10,5 @@
 
 # Uncomment and configure below
 
-export FREETYPE_PROPERTIES="truetype:interpreter-version=38"
+export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
+FREETYPE_PROPERTIES="truetype:interpreter-version=40"
