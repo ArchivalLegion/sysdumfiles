@@ -38,7 +38,6 @@ kdeconnect
 keepassxc
 libva-glx2
 libvdpau-va-gl1
-lxappearance
 mate-polkit
 mpv
 nano
@@ -52,7 +51,6 @@ openvpn
 p7zip-full
 papirus-icon-theme
 pavucontrol
-pcmanfm
 plymouth-theme-ubuntu-logo
 pulseaudio
 pulseaudio-module-bluetooth
@@ -72,6 +70,7 @@ streamlink
 sudo
 sxiv
 synaptic
+thunar
 tlp
 tmux
 tumbler
