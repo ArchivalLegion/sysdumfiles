@@ -52,7 +52,7 @@ grub-install --target=x86_64-efi --efi-directory=/boot/efi \
 
 echo "Create user dataset" && {
 ROOT_DS=$(zfs list -o name | awk '/ROOT\/"$RDATASET"_/{print $1;exit}')
-zfs create -o com.ubuntu.zsys:bootfs-datasets="$ROOT_DS" -o canmount=on -o mountpoint=/home/"$USER" rpool/USERDATA/"$USER"
+zfs create -o canmount=on -o mountpoint=/home/"$USER" rpool/USERDATA/"$USER"
 useradd -m -s /bin/bash "$USER"
 usermod -aG adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi,audio,wheel "$USER"
 }
