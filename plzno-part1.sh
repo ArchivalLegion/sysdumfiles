@@ -106,15 +106,15 @@ zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 }
 
 echo "Create filesystem datasets for the root and boot filesystems" && {
-zfs create -o mountpoint=/ -o com.ubuntu.zsys:bootfs=yes -o com.ubuntu.zsys:last-used=$(date +%s) rpool/ROOT/"$RDATASET"_"$UUID"
+zfs create -o mountpoint=/ rpool/ROOT/"$RDATASET"_"$UUID"
 zfs create -o mountpoint=/boot bpool/BOOT/"$RDATASET"_"$UUID"
 }
 
 echo "Create sub datasets" && {
-zfs create -o com.ubuntu.zsys:bootfs=no rpool/ROOT/"$RDATASET"_"$UUID"/srv
-zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off rpool/ROOT/"$RDATASET"_"$UUID"/usr
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/srv
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/usr
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/usr/local
-zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off rpool/ROOT/"$RDATASET"_"$UUID"/var
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/games
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/AccountsService
@@ -128,13 +128,13 @@ zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/mail
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/snap
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/spool
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/www
-zfs create -o com.ubuntu.zsys:bootfs=no rpool/ROOT/"$RDATASET"_"$UUID"/tmp
+zfs create rpool/ROOT/"$RDATASET"_"$UUID"/tmp
 chmod 1777 /mnt/tmp
 }
 
 echo "Create root's dataset" && {
 zfs create -o canmount=off -o mountpoint=/ rpool/USERDATA
-zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/"$RDATASET"_"$UUID" -o canmount=on -o mountpoint=/root rpool/USERDATA/root
+zfs create -o canmount=on -o mountpoint=/root rpool/USERDATA/root
 chmod 700 /mnt/root
 }
 
