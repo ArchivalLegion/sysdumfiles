@@ -6,12 +6,10 @@ bsdutils
 compton
 curl
 dbus-x11
-desktop-base
 dunst
 dvd+rw-tools
 ethtool
 ffmpegthumbnailer
-filezilla
 firefox-esr
 flameshot
 fonts-croscore
@@ -31,7 +29,7 @@ htop
 icewm
 kdeconnect
 keepassxc
-lxappearance
+libvdpau-va-gl1
 mate-polkit
 mpv
 nano
@@ -51,7 +49,6 @@ pulseaudio-module-bluetooth
 pulseaudio-module-jack
 pulsemixer
 python3-pip
-qbittorrent
 qjackctl
 qt5-style-plugins
 rfkill
@@ -64,13 +61,16 @@ streamlink
 sudo
 sxiv
 synaptic
+thunar
+thunar-archive-plugin
+thunar-gtkhash
+thunar-media-tags-plugin
 tlp
 tmux
 tumbler
 tumbler-plugins-extra
 unar
 vainfo
-variety
 wget
 wireless-tools
 wpasupplicant
