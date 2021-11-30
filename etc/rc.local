@@ -2,10 +2,10 @@
 
 # Disable hyper-threading, numa memory balancing,
 # kernel samepage merging, and transparent huge pages.
-echo never > /sys/kernel/mm/transparent_hugepage/enabled
-echo 0 > /proc/sys/kernel/numa_balancing
-echo 0 > /sys/kernel/mm/ksm/run
+# echo never > /sys/kernel/mm/transparent_hugepage/enabled
+# echo 0 > /proc/sys/kernel/numa_balancing
+# echo 0 > /sys/kernel/mm/ksm/run
 # echo off > /sys/devices/system/cpu/smt/control
 # ^ SMT Hyper threading
-
+echo'Ello!, Skipping questionable choices!'
 exit 0
