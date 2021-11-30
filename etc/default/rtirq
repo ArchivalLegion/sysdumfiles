@@ -10,7 +10,7 @@
 RTIRQ_NAME_LIST="snd usb i8042"
 
 # Highest priority.
-RTIRQ_PRIO_HIGH=90
+RTIRQ_PRIO_HIGH=99
 
 # Priority decrease step.
 RTIRQ_PRIO_DECR=5
@@ -19,17 +19,17 @@ RTIRQ_PRIO_DECR=5
 RTIRQ_PRIO_LOW=50
 
 ## Whether to reset all IRQ threads to SCHED_OTHER.
-RTIRQ_RESET_ALL=0
+# RTIRQ_RESET_ALL=0
 
 # On kernel configurations that support it,
 # which services should be NOT threaded 
 # (space separated list).
-RTIRQ_NON_THREADED="rtc snd"
+# RTIRQ_NON_THREADED="rtc snd"
 
 # Process names which will be forced to the
 # highest realtime priority range (99-91)
 # (space separated list, from highest to lower priority).
-RTIRQ_HIGH_LIST="timer"
+RTIRQ_HIGH_LIST="snd timer"
 
 # Save/restore state file path.
 RTIRQ_STATE=/var/run/rtirq.state
