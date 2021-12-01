@@ -7,7 +7,7 @@
 
 # IRQ thread service names
 # (space separated list, from higher to lower priority).
-RTIRQ_NAME_LIST="snd timer usb i8042"
+RTIRQ_NAME_LIST="snd usb i8042"
 
 # Highest priority.
 RTIRQ_PRIO_HIGH=99
@@ -29,7 +29,7 @@ RTIRQ_PRIO_LOW=50
 # Process names which will be forced to the
 # highest realtime priority range (99-91)
 # (space separated list, from highest to lower priority).
-RTIRQ_HIGH_LIST="snd timer"
+# RTIRQ_HIGH_LIST="timer"
 
 # Save/restore state file path.
 RTIRQ_STATE=/var/run/rtirq.state
