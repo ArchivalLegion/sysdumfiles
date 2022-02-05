@@ -1,4 +1,4 @@
-# Load saved entry
+# Load last selected entry
 GRUB_TIMEOUT_STYLE="menu"
 GRUB_DEFAULT="saved"
 GRUB_SAVEDEFAULT="true"
@@ -6,17 +6,13 @@ GRUB_TIMEOUT="6"
 GRUB_RECORDFAIL_TIMEOUT="6"
 GRUB_FORCE_HIDDEN_MENU="false"
 
-# Video mode
-GRUB_GFXMODE="auto"
-GRUB_GFXPAYLOAD_LINUX="keep"
-
 # Enable encrypted /boot on LUKS
 # GRUB_ENABLE_CRYPTODISK="true"
 
 # Distro info & Kernel CLI
 GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo DistroCheckFailed`
 GRUB_CMDLINE_LINUX="quiet loglevel=1 splash vt.handoff=1 nowatchdog threadirqs noibrs noibpb nopti nospectre_v2 nospectre_v1 l1tf=off nospec_store_bypass_disable no_stf_barrier mds=off tsx=on tsx_async_abort=off mitigations=off"
-GRUB_CMDLINE_LINUX_DEFAULT="sysrq_always_enabled=1 init_on_alloc=0"
+GRUB_CMDLINE_LINUX_DEFAULT="root=ZFS=rpool/ROOT/peanut_butter sysrq_always_enabled=1 init_on_alloc=0"
 
 # Desired menu colors, used by normal and wallpaper
 # modes only. Entries specified as foreground/background
