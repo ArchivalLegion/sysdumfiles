@@ -161,8 +161,8 @@ echo "$HOSTNAME" > /mnt/etc/hostname
 
 echo "Copying system configs into target system" && {
 cp plzno-part2.sh /mnt/root/
-cp -r /../../etc/ /mnt/
-cp -r /../../tmp/ /mnt/
+cp -r ../../etc/ /mnt/
+cp -r ../../tmp/ /mnt/
 }
 
 echo "Chrooting into new system" && {
