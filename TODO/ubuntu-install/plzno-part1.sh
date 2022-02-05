@@ -6,23 +6,32 @@ set -euo pipefail
 
 # Select the target disk
 DISK=/dev/disk/by-id/
+
 # Encryption password
 PASS=password
+
 # Ubuntu / Debian release for debootstrap
 RELEASE=focal
+
 # System architecture: amd64,armhf,arm64,powerpc,ppc64el,i386,s390x
 ARCH=amd64
-# The dataset naming scheme: rpool/peanut_butter
+# amd64 = x86_64/64bit | i386 = x86/32bit
+
+# The dataset name: rpool/peanut_butter
 RDATASET=peanut
 UUID=butter
-# Username, lowercase only
+
+# Username
 USER=dauser
+
 # Computer hostname
-HOSTNAME=ArchivalLegion
+HOSTNAME=NewPlayer
+
 # GRUB bootloader id
-BOOTID=ubuntu
+BOOTID=ubuntu_$RELEASE
+
 # Name of the EFI/FAT partition
-EFILABEL=FATT
+EFILABEL=tuxzfs
 
 
 echo "Disabling automount and stopping zed" && {
