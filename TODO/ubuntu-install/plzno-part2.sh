@@ -4,7 +4,7 @@ set -euo pipefail
 
 echo "Update package index, configure system, and install required packages" && {
 apt update
-apt full-upgrade
+apt full-upgrade -yq
 dpkg-reconfigure locales tzdata keyboard-configuration console-setup
 apt install -yq nano dosfstools cryptsetup ubuntu-standard network-manager
 }
