@@ -56,9 +56,9 @@ grub-probe /boot
 update-initramfs -c -k all
 update-grub
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
---bootloader-id=$BOOTID --recheck --removable
+--bootloader-id=$BOOTID --recheck --removable --no-floppy
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
---bootloader-id=$BOOTID --recheck
+--bootloader-id=$BOOTID --recheck --no-floppy
 }
 
 echo "Create user dataset" && {
