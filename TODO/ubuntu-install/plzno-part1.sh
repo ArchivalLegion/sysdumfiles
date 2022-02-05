@@ -135,7 +135,6 @@ chmod 700 /mnt/root
 
 echo "Populating target system" && {
 debootstrap --arch="$ARCH" "$RELEASE" /mnt
-zfs set devices=off "$RDATASET"_"$UUID"
 }
 
 echo "Copying host zfs cache" && {
