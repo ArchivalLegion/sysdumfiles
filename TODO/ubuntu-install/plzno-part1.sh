@@ -130,9 +130,7 @@ zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/AccountsService
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/apt
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/dpkg
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/flatpak
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/NetworkManager
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/snapd
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/log
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/mail
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/snap
