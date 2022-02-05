@@ -162,13 +162,13 @@ echo "$HOSTNAME" > /mnt/etc/hostname
 
 echo "Copying system configs into target system" && {
 cp plzno-part2.sh /mnt/root/
-cp -r etc/ /mnt/
-cp -r tmp/ /mnt/
+cp -r /../..etc/ /mnt/
+cp -r /../..tmp/ /mnt/
 }
 
 echo "Chrooting into new system" && {
-mount --rbind /dev  /mnt/dev
-mount --rbind /proc /mnt/proc
-mount --rbind /sys  /mnt/sys
+mount --make-private --rbind /dev  /mnt/dev
+mount --make-private --rbind /proc /mnt/proc
+mount --make-private --rbind /sys  /mnt/sys
 chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash --login
 }
