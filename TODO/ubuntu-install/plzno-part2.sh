@@ -5,7 +5,7 @@ set -euo pipefail
 echo "Update package index, configure system, and install required packages" && {
 apt update
 dpkg-reconfigure locales tzdata keyboard-configuration console-setup
-apt install -yq nano dosfstools cryptsetup ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed linux-image-generic shim-signed zfs-initramfs network-manager
+apt install -yq nano dosfstools cryptsetup ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed shim-signed network-manager
 }
 
 echo "Format EFI partition and bind /boot/efi/grub" && {
@@ -46,6 +46,7 @@ addgroup --system wheel
 echo "Skipping patch, bug fixed upstream"
 
 echo "Install GRUB" && {
+apt install -yq linux-image-generic zfs-initramfs
 grub-probe /boot
 sleep 3
 update-initramfs -c -k all
