@@ -28,7 +28,7 @@ USER=dauser
 HOSTNAME=NewPlayer
 
 # GRUB bootloader id
-BOOTID=ubuntu_$RELEASE
+BOOTID=ubuntu-zfs
 
 # Name of the EFI/FAT partition
 EFILABEL=tuxzfs
