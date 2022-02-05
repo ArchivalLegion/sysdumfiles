@@ -52,7 +52,7 @@ echo "Wiping and partitioning drive" && {
 swapoff --all
 sgdisk --zap-all $DISK
 wipefs -af $DISK
-sgdisk -n1:1M:+1024M -t1:EF00 $DISK -c1:$EFILABEL
+sgdisk -n1:1M:+128M -t1:EF00 $DISK -c1:$EFILABEL
 sgdisk -a1 -n5:0:+1000K -t5:EF02 $DISK -c5:LEGACY_BOOT
 sgdisk -n2:0:+1G -t2:8200 $DISK -c2:SWAP
 sgdisk -n3:0:+4G -t3:BE00 $DISK -c3:BPOOL
@@ -160,6 +160,6 @@ mount --make-private --rbind /sys  /mnt/sys
 chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash --login
 }
 
-echo "You're back! unmounting target" && {
+echo "Welcome back! unmounting target" && {
 mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {} && zpool export -a
 }
