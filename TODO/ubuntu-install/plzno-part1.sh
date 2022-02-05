@@ -101,9 +101,9 @@ zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 }
 
 echo "Create filesystem datasets for the root and boot filesystems" && {
-zfs create -o mountpoint=/ rpool/ROOT/"$RDATASET"_"$UUID"
+zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/"$RDATASET"_"$UUID"
+zfs create -o canmount=noauto -o mountpoint=/boot bpool/BOOT/"$RDATASET"_"$UUID"
 zpool set bootfs=rpool/ROOT/"$RDATASET"_"$UUID" rpool
-zfs create -o mountpoint=/boot bpool/BOOT/"$RDATASET"_"$UUID"
 }
 
 echo "Create sub datasets" && {
@@ -135,6 +135,7 @@ chmod 700 /mnt/root
 
 echo "Populating target system" && {
 debootstrap --arch="$ARCH" "$RELEASE" /mnt
+zfs set devices=off "$RDATASET"_"$UUID"
 }
 
 echo "Copying host zfs cache" && {
@@ -159,4 +160,6 @@ mount --make-private --rbind /sys  /mnt/sys
 chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash --login
 }
 
-alias finish='mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {} && zpool export -a
+echo "You're back! unmounting target" && {
+mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {} && zpool export -a
+}
