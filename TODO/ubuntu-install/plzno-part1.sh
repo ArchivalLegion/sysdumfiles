@@ -43,7 +43,7 @@ zpool export -a
 
 echo "Setting mirrors and installing tools" && {
 rm /etc/apt/sources.list || true
-cp -r /../../etc/apt/sources.list.d/* /etc/apt/sources.list.d/
+cp -r ../../etc/apt/sources.list.d/* /etc/apt/sources.list.d/
 apt update
 apt install -yq debootstrap gdisk zfs-initramfs
 }
