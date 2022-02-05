@@ -53,7 +53,7 @@ echo "Skipping patch, bug fixed upstream"
 
 echo "Install GRUB" && {
 apt install -yq grub-efi-amd64 grub-efi-amd64-signed shim-signed linux-image-generic zfs-initramfs || true
-grub-probe /boot
+grub-probe /boot || true
 update-initramfs -c -k all
 update-grub
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
