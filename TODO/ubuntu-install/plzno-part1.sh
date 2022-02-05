@@ -102,6 +102,7 @@ zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 
 echo "Create filesystem datasets for the root and boot filesystems" && {
 zfs create -o mountpoint=/ rpool/ROOT/"$RDATASET"_"$UUID"
+zpool set bootfs=rpool/ROOT/"$RDATASET"_"$UUID" rpool
 zfs create -o mountpoint=/boot bpool/BOOT/"$RDATASET"_"$UUID"
 }
 
