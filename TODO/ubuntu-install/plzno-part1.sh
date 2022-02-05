@@ -31,7 +31,7 @@ HOSTNAME=NewPlayer
 BOOTID=ubuntu-zfs
 
 # Name of the EFI/FAT partition
-EFILABEL=tuxzfs
+EFILABEL=TUXZFS
 
 
 echo "Disabling automount and stopping zed" && {
