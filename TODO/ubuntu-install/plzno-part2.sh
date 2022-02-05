@@ -46,7 +46,7 @@ addgroup --system wheel
 echo "Skipping patch, bug fixed upstream"
 
 echo "Install GRUB" && {
-apt install -yq linux-image-generic zfs-initramfs
+apt install -yq linux-image-generic zfs-initramfs || true
 grub-probe /boot
 sleep 3
 update-initramfs -c -k all
