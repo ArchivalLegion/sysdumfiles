@@ -2,16 +2,17 @@
 set -euo pipefail
 # set -xv
 
-echo "Update package index, setup system, and install needed packages" && {
+echo "Update package index, configure system, and install required packages" && {
 apt update
 dpkg-reconfigure locales tzdata keyboard-configuration console-setup
-apt install -yq nano dosfstools cryptsetup curl patch ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed linux-image-generic shim-signed zfs-initramfs network-manager
+apt install -yq nano dosfstools cryptsetup ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed linux-image-generic shim-signed zfs-initramfs network-manager
 }
 
 echo "Format EFI partition and bind /boot/efi/grub" && {
-mkdosfs -F 32 -n "$EFILABEL" "$DISK"-part1
+mkdosfs -s 1 -F 32 -n "$EFILABEL" "$DISK"-part1
 mkdir /boot/efi || true
-echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) /boot/efi vfat defaults 0 0 >> /etc/fstab
+echo /dev/disk/by-uuid/$(blkid -s UUID -o value $DISK-part1) \
+/boot/efi vfat defaults 0 0 >> /etc/fstab
 sync
 sleep 3
 mount /boot/efi
@@ -22,7 +23,8 @@ mount /boot/grub
 }
 
 echo "Encrypt swap partition" && {
-echo swap $DISK-part2 /dev/urandom swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab
+echo swap $DISK-part2 /dev/urandom \
+swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab
 echo /dev/mapper/swap none swap defaults 0 0 >> /etc/fstab
 }
 
@@ -37,17 +39,19 @@ addgroup --system spi
 addgroup --system wheel
 }
 
-echo "Patch a dependency loop" && {
-curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
-sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1)
-}
+#echo "Patch a dependency loop" && {
+#curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
+#sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1)
+#}
+echo "Skipping patch, bug fixed upstream"
 
 echo "Install GRUB" && {
+grub-probe /boot
+sleep 3
+update-initramfs -c -k all
 update-grub
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
---bootloader-id=$BOOTID --recheck --compress=no
-grub-install --target=x86_64-efi --efi-directory=/boot/efi \
---bootloader-id=$BOOTID --recheck --compress=no --removable
+--bootloader-id=$BOOTID --recheck --removable --no-floppy
 }
 
 echo "Create user dataset" && {
