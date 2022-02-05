@@ -45,14 +45,14 @@ echo "Setting mirrors and installing tools" && {
 rm /etc/apt/sources.list || true
 cp -r ../../etc/apt/sources.list.d/* /etc/apt/sources.list.d/
 apt update
-apt install -yq debootstrap gdisk zfs-initramfs
+apt install -yq debootstrap gdisk zfsutils-linux
 }
 
 echo "Wiping and partitioning drive" && {
 swapoff --all
 sgdisk --zap-all $DISK
 wipefs -af $DISK
-sgdisk -n1:1M:+256M -t1:EF00 $DISK -c1:$EFILABEL
+sgdisk -n1:1M:+1024M -t1:EF00 $DISK -c1:$EFILABEL
 sgdisk -a1 -n5:0:+1000K -t5:EF02 $DISK -c5:LEGACY_BOOT
 sgdisk -n2:0:+1G -t2:8200 $DISK -c2:SWAP
 sgdisk -n3:0:+4G -t3:BE00 $DISK -c3:BPOOL
@@ -63,49 +63,34 @@ sleep 7
 
 echo "Creating bpool" && {
 zpool create -f \
--d \
--o cachefile=/etc/zfs/zpool.cache \
--o ashift=12 \
--o autotrim=on \
--o feature@async_destroy=enabled \
--o feature@bookmarks=enabled \
--o feature@embedded_data=enabled \
--o feature@empty_bpobj=enabled \
--o feature@enabled_txg=enabled \
--o feature@extensible_dataset=enabled \
--o feature@filesystem_limits=enabled \
--o feature@hole_birth=enabled \
--o feature@large_blocks=enabled \
--o feature@lz4_compress=enabled \
--o feature@spacemap_histogram=enabled \
--O acltype=posixacl \
--O canmount=off \
--O compression=lz4 \
--O devices=off \
--O normalization=formD \
--O atime=off \
--O xattr=sa \
--O mountpoint=/boot \
--R /mnt \
+    -o cachefile=/etc/zfs/zpool.cache \
+    -o ashift=12 -o autotrim=on -d \
+    -o feature@async_destroy=enabled \
+    -o feature@bookmarks=enabled \
+    -o feature@embedded_data=enabled \
+    -o feature@empty_bpobj=enabled \
+    -o feature@enabled_txg=enabled \
+    -o feature@extensible_dataset=enabled \
+    -o feature@filesystem_limits=enabled \
+    -o feature@hole_birth=enabled \
+    -o feature@large_blocks=enabled \
+    -o feature@lz4_compress=enabled \
+    -o feature@spacemap_histogram=enabled \
+    -O acltype=posixacl -O canmount=off -O compression=lz4 \
+    -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
+    -O mountpoint=/boot -R /mnt \
 bpool $DISK-part3
 echo "bpool done"
 }
 
 echo "Creating rpool" && {
 echo $PASS | zpool create -f \
--o cachefile=/etc/zfs/zpool.cache \
--o ashift=12 \
--o autotrim=on \
--O encryption=aes-256-gcm -O keylocation=prompt -O keyformat=passphrase \
--O acltype=posixacl \
--O canmount=off \
--O compression=lz4 \
--O dnodesize=auto \
--O normalization=formD \
--O atime=off \
--O xattr=sa \
--O mountpoint=/ \
--R /mnt \
+    -o ashift=12 -o autotrim=on \
+    -O encryption=aes-256-gcm \
+    -O keylocation=prompt -O keyformat=passphrase \
+    -O acltype=posixacl -O canmount=off -O compression=lz4 \
+    -O dnodesize=auto -O normalization=formD -O relatime=on \
+    -O xattr=sa -O mountpoint=/ -R /mnt \
 rpool $DISK-part4
 echo "rpool done"
 }
@@ -122,9 +107,9 @@ zfs create -o mountpoint=/boot bpool/BOOT/"$RDATASET"_"$UUID"
 
 echo "Create sub datasets" && {
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/srv
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/usr
+zfs create -o canmount=off rpool/ROOT/"$RDATASET"_"$UUID"/usr
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/usr/local
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var
+zfs create -o canmount=off rpool/ROOT/"$RDATASET"_"$UUID"/var
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/games
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/lib/AccountsService
@@ -136,8 +121,9 @@ zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/mail
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/snap
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/spool
 zfs create rpool/ROOT/"$RDATASET"_"$UUID"/var/www
-zfs create rpool/ROOT/"$RDATASET"_"$UUID"/tmp
-chmod 1777 /mnt/tmp
+mkdir /mnt/run
+mount -t tmpfs tmpfs /mnt/run
+mkdir /mnt/run/lock
 }
 
 echo "Create root's dataset" && {
@@ -171,3 +157,5 @@ mount --make-private --rbind /proc /mnt/proc
 mount --make-private --rbind /sys  /mnt/sys
 chroot /mnt /usr/bin/env RDATASET=$RDATASET UUID=$UUID DISK=$DISK EFILABEL=$EFILABEL BOOTID=$BOOTID USER=$USER bash --login
 }
+
+alias finish='mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {} && zpool export -a
