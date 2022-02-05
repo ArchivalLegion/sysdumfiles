@@ -5,7 +5,7 @@ set -euo pipefail
 echo "Update package index, configure system, and install required packages" && {
 apt update
 dpkg-reconfigure locales tzdata keyboard-configuration console-setup
-apt install -yq nano dosfstools cryptsetup ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed shim-signed network-manager
+apt install -yq nano dosfstools cryptsetup ubuntu-standard network-manager
 }
 
 echo "Format EFI partition and bind /boot/efi/grub" && {
@@ -28,6 +28,11 @@ swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab
 echo /dev/mapper/swap none swap defaults 0 0 >> /etc/fstab
 }
 
+echo "Use tmpsfs" && {
+cp /usr/share/systemd/tmp.mount /etc/systemd/system/
+systemctl enable tmp.mount
+}
+
 echo "Adding system groups" && {
 addgroup --system lpadmin
 addgroup --system lxd
@@ -46,9 +51,8 @@ addgroup --system wheel
 echo "Skipping patch, bug fixed upstream"
 
 echo "Install GRUB" && {
-apt install -yq linux-image-generic zfs-initramfs || true
+apt install -yq grub-efi-amd64 grub-efi-amd64-signed shim-signed linux-image-generic zfs-initramfs || true
 grub-probe /boot
-sleep 3
 update-initramfs -c -k all
 update-grub
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
