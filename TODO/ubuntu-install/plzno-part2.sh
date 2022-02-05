@@ -52,7 +52,9 @@ sleep 3
 update-initramfs -c -k all
 update-grub
 grub-install --target=x86_64-efi --efi-directory=/boot/efi \
---bootloader-id=$BOOTID --recheck --removable --no-floppy
+--bootloader-id=$BOOTID --recheck --removable
+grub-install --target=x86_64-efi --efi-directory=/boot/efi \
+--bootloader-id=$BOOTID --recheck
 }
 
 echo "Create user dataset" && {
