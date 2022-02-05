@@ -43,7 +43,7 @@ zpool export -a
 
 echo "Setting mirrors and installing tools" && {
 rm /etc/apt/sources.list || true
-cp -r etc/apt/sources.list.d/* /etc/apt/sources.list.d/
+cp -r /../../etc/apt/sources.list.d/* /etc/apt/sources.list.d/
 apt update
 apt install -yq debootstrap gdisk zfs-initramfs
 }
@@ -163,8 +163,8 @@ echo "$HOSTNAME" > /mnt/etc/hostname
 
 echo "Copying system configs into target system" && {
 cp plzno-part2.sh /mnt/root/
-cp -r /../..etc/ /mnt/
-cp -r /../..tmp/ /mnt/
+cp -r /../../etc/ /mnt/
+cp -r /../../tmp/ /mnt/
 }
 
 echo "Chrooting into new system" && {
