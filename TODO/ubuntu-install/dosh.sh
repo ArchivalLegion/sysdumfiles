@@ -171,7 +171,7 @@ echo "Setting target hostname" && {
 	}
 
 echo "Copying system configs into target system" && {
-	cp plzno-part2.sh /mnt/root/
+	cp booper.sh /mnt/root/
 	cp -r ../../etc/ /mnt/
 	cp -r ../../tmp/ /mnt/
 	}
