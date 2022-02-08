@@ -7,6 +7,7 @@ compton
 curl
 dbus-x11
 dvd+rw-tools
+engrampa
 ethtool
 filezilla
 firefox
@@ -23,12 +24,13 @@ fonts-ubuntu
 geany
 git
 gvfs
+hardinfo
 htop
 icewm
-intel-media-va-driver-non-free
 kdeconnect
 keepassxc
 libvdpau-va-gl1
+lshw
 lxpolkit
 mpv
 nano
@@ -66,7 +68,6 @@ unar
 viewnior
 wget
 wpasupplicant
-xarchiver
 xdg-dbus-proxy
 xdg-user-dirs
 xdg-user-dirs-gtk
