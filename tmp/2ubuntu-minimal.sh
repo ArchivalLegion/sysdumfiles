@@ -5,9 +5,10 @@ set -xv
 echo "Update packages and configure system" && {
 	apt update
 	apt full-upgrade -yq
-	dpkg-reconfigure locales tzdata keyboard-configuration console-setup nano \
-  	dosfstools cryptsetup ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed \
-  	shim-signed linux-image-generic linux-image-lowlatency-hwe-20.04
+	dpkg-reconfigure locales tzdata keyboard-configuration console-setup
+	apt install -yq nano dosfstools cryptsetup ubuntu-standard grub-efi-amd64 \
+	grub-efi-amd64-signed shim-signed \
+	linux-image-generic linux-image-lowlatency-hwe-20.04
   }
 
 echo "Adding system groups" && {
@@ -37,7 +38,7 @@ echo "Install GRUB" && {
 
 set +e
 echo "Install user packages" && {
-	xargs -a ubuntu-gui apt install 
+	xargs -a ubuntu-gui apt install -yq 
   }
 
 echo "Set passwords" && {
