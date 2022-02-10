@@ -10,11 +10,10 @@ ARCH=amd64
 HOSTNAME=boom
 BOOTID=ZAMN
 
-set +e
 echo "Disabling automount" && {
-	gsettings set org.gnome.desktop.media-handling automount false
+	gsettings set org.gnome.desktop.media-handling automount false || true
 	}
-set -e
+	
 echo "Install tools" && {
 	apt update
 	apt install -yq debootstrap gdisk
@@ -32,13 +31,13 @@ echo "Wiping and partitioning drive" && {
 	}
 
 echo "Creating Filesystems" && {
-  cryptsetup luksFormat --luks1 "$DISK-part2"
-  cryptsetup luksOpen "$DISK" install
-  mkfs.ext4 -e remount-ro -E discard,lazy_journal_init=0,lazy_itable_init=0 -L zamn -m 1 -U time -v /dev/mapper/install
-  mount /dev/mapper/install /mnt
-  mkfs.fat -v -n "$EFILABEL" "$DISK-part1"
-  mkdir /mnt/efi
-  mount "$DISK-part1" /mnt/efi
+  	cryptsetup luksFormat --luks1 "$DISK-part2"
+  	cryptsetup luksOpen "$DISK" install
+  	mkfs.ext4 -e remount-ro -E discard,lazy_journal_init=0,lazy_itable_init=0 -L zamn -m 1 -U time -v /dev/mapper/install
+  	mount /dev/mapper/install /mnt
+  	mkfs.fat -v -n "$EFILABEL" "$DISK-part1"
+  	mkdir /mnt/efi
+  	mount "$DISK-part1" /mnt/efi
   }
 
 echo "Populating system" && {
