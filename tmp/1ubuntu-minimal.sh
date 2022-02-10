@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -xv
+#set -xv
+DEBIAN_FRONTEND=noninteractive
 
 DISK=/dev/disk/by-id/
 USER=NewPlayer
 EFILABEL=ZAMN
 RELEASE=focal
 ARCH=amd64
-HOSTNAME=boom
+HOSTNAME=!!ZAMN!!!
 BOOTID=ZAMN
+EPASS=password
 
 echo "Disabling automount" && {
 	gsettings set org.gnome.desktop.media-handling automount false || true
 	}
-	
+
 echo "Install tools" && {
 	apt update
 	apt install -yq debootstrap gdisk
@@ -25,17 +27,17 @@ echo "Wiping and partitioning drive" && {
 	wipefs -af $DISK
 	sgdisk -n1:1M:+64M -t1:EF00 $DISK -c1:$EFILABEL
 	sgdisk -a1 -n5:0:+1000K -t5:EF02 $DISK -c5:legacy_boot
-	sgdisk -n2:0:0 -t2:BF00 $DISK -c2:ZAMN
+	sgdisk -n2:0:0 -t2:BF00 $DISK -c2:root
 	echo "Waiting for partition symlinks to update"
 	sleep 7
 	}
 
 echo "Creating Filesystems" && {
-  	cryptsetup luksFormat --type luks1 "$DISK-part2"
-  	cryptsetup luksOpen "$DISK-part2" install
+  	echo -n "$EPASS" | cryptsetup luksFormat --type luks1 "$DISK-part2"
+  	echo "$EPASS" | cryptsetup luksOpen "$DISK-part2" install
   	mkfs.ext4 -e remount-ro -E discard,lazy_journal_init=0,lazy_itable_init=0 -L zamn -m 1 -U time -v /dev/mapper/install
   	mount /dev/mapper/install /mnt
-  	mkfs.fat -v -n "$EFILABEL" "$DISK-part1"
+  	mkfs.vfat -F 32 -s 1 -v -n "$EFILABEL" "$DISK-part1"
   	mkdir /mnt/efi
   	mount "$DISK-part1" /mnt/efi
   }
