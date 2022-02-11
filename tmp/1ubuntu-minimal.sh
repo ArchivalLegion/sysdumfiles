@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 #set -xv
-DEBIAN_FRONTEND=noninteractive
+export DEBIAN_FRONTEND=noninteractive
 
 DISK=/dev/disk/by-id/
-USER=NewPlayer
+USER=newplayer
 EFILABEL=ZAMN
 RELEASE=focal
 ARCH=amd64
-HOSTNAME=!!ZAMN!!!
+HOSTNAME=ZAMN
 BOOTID=ZAMN
 EPASS=password
 RLABEL=zamn
@@ -28,7 +28,7 @@ echo "Wiping and partitioning drive" && {
 	wipefs -af $DISK
 	sgdisk -n1:1M:+64M -t1:EF00 $DISK -c1:$EFILABEL
 	sgdisk -a1 -n5:0:+1000K -t5:EF02 $DISK -c5:legacy_boot
-	sgdisk -n2:0:0 -t2:BF00 $DISK -c2:root
+	sgdisk -n2:0:0 -t2:BF00 $DISK -c2:$RLABEL
 	echo "Waiting for partition symlinks to update"
 	sleep 7
 	}
@@ -39,9 +39,9 @@ echo "Creating Filesystems" && {
   	mkfs.ext4 -e remount-ro -E discard,lazy_journal_init=0,lazy_itable_init=0 -L $RLABEL -m 1 -U time -v /dev/mapper/install
   	mount /dev/mapper/install /mnt
   	mkfs.vfat -F 32 -s 1 -v -n "$EFILABEL" "$DISK-part1"
-  	mkdir /mnt/efi
-  	mount "$DISK-part1" /mnt/efi
-  }
+  	mkdir -p /mnt/boot/efi
+  	mount "$DISK-part1" /mnt/boot/efi
+	}
 
 echo "Populating system" && {
 	debootstrap --arch="$ARCH" "$RELEASE" /mnt
