@@ -57,8 +57,8 @@ echo "Copying system configs into target system" && {
 	}
 
 echo "Chroot into system" && {
-	mount --make-private --rbind /dev  /mnt/dev
-	mount --make-private --rbind /proc /mnt/proc
-	mount --make-private --rbind /sys  /mnt/sys
+	mount --make-private --rbind --make-rslave /dev  /mnt/dev
+	mount --make-private --rbind --make-rslave /proc /mnt/proc
+	mount --make-private --rbind --make-rslave /sys  /mnt/sys
 	chroot /mnt /usr/bin/env BOOTID=$BOOTID USER=$USER bash --login
 	}
