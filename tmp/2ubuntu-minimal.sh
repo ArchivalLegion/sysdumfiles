@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 #set -xv
-DEBIAN_FRONTEND=noninteractive
+export DEBIAN_FRONTEND=noninteractive
 
 echo "Update packages and configure system" && {
 	apt update
@@ -27,23 +27,20 @@ echo "Create user" && {
 }
 
 echo "Install GRUB" && {
-	grub-probe /boot || true
 	update-grub
-	grub-install --target=x86_64-efi --efi-directory=/efi \
-	--bootloader-id=$BOOTID --recheck --removable --no-floppy
-	grub-install --target=x86_64-efi --efi-directory=/efi \
-	--bootloader-id=$BOOTID --recheck --no-floppy
+	grub-install --target=x86_64-efi --efi-directory=/boot/efi \
+	--bootloader-id=$BOOTID --recheck --removable -v
+	update-grub
 	}
 
 set +e
 echo "Install user packages" && {
 	xargs -a ubuntu-gui apt install -yq 
-  }
+	}
 
 echo "Set passwords" && {
 	passwd root
 	passwd "$USER"
-  }
+	}
 set -e
-
 echo "Finished! Enjoy the system"
