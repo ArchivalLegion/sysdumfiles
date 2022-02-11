@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -xv
+#set -xv
+DEBIAN_FRONTEND=noninteractive
 
 echo "Update packages and configure system" && {
 	apt update
 	apt full-upgrade -yq
 	dpkg-reconfigure locales tzdata keyboard-configuration console-setup
-	apt install -yq nano dosfstools cryptsetup ubuntu-standard grub-efi-amd64 \
-	grub-efi-amd64-signed shim-signed \
-	linux-image-generic linux-image-lowlatency-hwe-20.04
+	apt install -yq nano dosfstools cryptsetup ubuntu-standard grub-efi-amd64 shim linux-image-generic linux-image-lowlatency-hwe-20.04
   }
 
 echo "Adding system groups" && {
@@ -42,7 +41,7 @@ echo "Install user packages" && {
   }
 
 echo "Set passwords" && {
-	passwd
+	passwd root
 	passwd "$USER"
   }
 set -e
