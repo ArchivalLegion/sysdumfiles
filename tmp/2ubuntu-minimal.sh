@@ -7,7 +7,7 @@ echo "Update packages and configure system" && {
 	apt update
 	apt full-upgrade -yq
 	dpkg-reconfigure locales tzdata keyboard-configuration console-setup
-	apt install -yq nano dosfstools cryptsetup ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed shim shim-signed linux-image-generic linux-image-lowlatency-hwe-20.04
+	apt install -yq nano dosfstools cryptsetup ubuntu-standard linux-image-generic linux-image-lowlatency-hwe-20.04
   }
 
 echo "Adding system groups" && {
@@ -27,9 +27,9 @@ echo "Create user" && {
 }
 
 echo "Install GRUB" && {
-	update-grub
-	grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-	--bootloader-id=$BOOTID --recheck --removable -v
+	apt install grub-efi-amd64 grub-efi-amd64-signed shim shim-signed
+	update-initramfs -c -k all
+	grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=$BOOTID --recheck --removable
 	update-grub
 	}
 
