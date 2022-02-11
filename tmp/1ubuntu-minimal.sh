@@ -28,7 +28,7 @@ echo "Wiping and partitioning drive" && {
 	wipefs -af $DISK
 	sgdisk -n1:1M:+64M -t1:EF00 $DISK -c1:$EFILABEL
 	sgdisk -a1 -n5:0:+1000K -t5:EF02 $DISK -c5:legacy_boot
-	sgdisk -n2:0:0 -t2:BF00 $DISK -c2:$RLABEL
+	sgdisk -n2:0:0 -t2:8300 $DISK -c2:$RLABEL
 	echo "Waiting for partition symlinks to update"
 	sleep 7
 	}
