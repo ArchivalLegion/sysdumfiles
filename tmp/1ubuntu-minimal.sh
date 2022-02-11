@@ -11,7 +11,7 @@ ARCH=amd64
 HOSTNAME=ZAMN
 BOOTID=ZAMN
 EPASS=password
-RLABEL=zamn
+RLABEL=ZAMN
 
 echo "Disabling automount" && {
 	gsettings set org.gnome.desktop.media-handling automount false || true
@@ -35,9 +35,9 @@ echo "Wiping and partitioning drive" && {
 
 echo "Creating Filesystems" && {
   	echo -n "$EPASS" | cryptsetup luksFormat --type luks1 "$DISK-part2"
-  	echo "$EPASS" | cryptsetup luksOpen "$DISK-part2" install
-  	mkfs.ext4 -e remount-ro -E discard,lazy_journal_init=0,lazy_itable_init=0 -L $RLABEL -m 1 -U time -v /dev/mapper/install
-  	mount /dev/mapper/install /mnt
+  	echo "$EPASS" | cryptsetup luksOpen "$DISK-part2" $RLABEL
+  	mkfs.ext4 -e remount-ro -E discard,lazy_journal_init=0,lazy_itable_init=0 -L $RLABEL -m 1 -U time -v /dev/mapper/$RLABEL
+  	mount /dev/mapper/$RLABEL /mnt
   	mkfs.vfat -F 32 -s 1 -v -n "$EFILABEL" "$DISK-part1"
   	mkdir -p /mnt/boot/efi
   	mount "$DISK-part1" /mnt/boot/efi
