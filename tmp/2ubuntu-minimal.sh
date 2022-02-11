@@ -7,7 +7,7 @@ echo "Update packages and configure system" && {
 	apt update
 	apt full-upgrade -yq
 	dpkg-reconfigure locales tzdata keyboard-configuration console-setup
-	apt install -yq nano dosfstools cryptsetup ubuntu-standard grub-efi-amd64 shim linux-image-generic linux-image-lowlatency-hwe-20.04
+	apt install -yq nano dosfstools cryptsetup ubuntu-standard grub-efi-amd64 grub-efi-amd64-signed shim shim-signed linux-image-generic linux-image-lowlatency-hwe-20.04
   }
 
 echo "Adding system groups" && {
