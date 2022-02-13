@@ -28,8 +28,9 @@ echo "Create user" && {
 
 echo "Install GRUB" && {
 	apt install grub-efi-amd64 grub-efi-amd64-signed shim shim-signed
-	update-initramfs -c -k all
 	grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=$BOOTID --recheck --removable
+	apt-get install --reinstall --yes --quiet grub-efi-amd64-signed
+	update-initramfs -c -k all
 	update-grub
 	}
 
