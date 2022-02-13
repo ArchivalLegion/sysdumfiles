@@ -3,18 +3,25 @@ set -euo pipefail
 #set -xv
 export DEBIAN_FRONTEND=noninteractive
 
-DISK=/dev/disk/by-id/
-USER=newplayer
-EFILABEL=ZAMN
-RELEASE=focal
-ARCH=amd64
-HOSTNAME=ZAMN
-BOOTID=ZAMN
-EPASS=password
-RLABEL=ZAMN
+#DISK=/dev/disk/by-id/
+#USER=newplayer
+#EFILABEL=ZAMN
+#RELEASE=focal
+#HOSTNAME=ZAMN
+#BOOTID=EFI
+#EPASS=password
+#RLABEL=ZAMN
 
-echo "Disabling automount" && {
-	gsettings set org.gnome.desktop.media-handling automount false || true
+echo "Enter the following information" && {
+	echo "Target disk id";read DISK
+	DISK=/dev/disk/by-id/$DISK
+	echo "User name";read USER
+	echo "Encryption password";read EPASS
+	echo "Root partition label";read RLABEL
+	echo "Computer name"; read HOSTNAME
+	echo "Bootloader id";read BOOTID
+	EFILABEL=$BOOTID
+	echo "Which release should be installed?";read RELEASE
 	}
 
 echo "Install tools" && {
@@ -44,7 +51,7 @@ echo "Creating Filesystems" && {
 	}
 
 echo "Populating system" && {
-	debootstrap --arch="$ARCH" "$RELEASE" /mnt
+	debootstrap "$RELEASE" /mnt
 	}
 
 echo "Setting hostname" && {
