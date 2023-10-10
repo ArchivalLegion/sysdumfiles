@@ -4,19 +4,19 @@ set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 #DISK=/dev/disk/by-id/
-#USER=newplayer
-#EFILABEL=ZAMN
+#USER=user
+#EFILABEL=ubuntu
 #RELEASE=focal
-#HOSTNAME=ZAMN
-#BOOTID=EFI
+#HOSTNAME=ubuntu
+#BOOTID=ubuntu
 #EPASS=password
-#RLABEL=ZAMN
+#RLABEL=ubuntu
 
 echo "Enter the following information" && {
 	echo "Target disk id";read DISK
 	DISK=/dev/disk/by-id/$DISK
 	echo "User name";read USER
-	echo "Encryption password";read EPASS
+	#echo "Encryption password";read EPASS
 	echo "Root partition label";read RLABEL
 	echo "Computer name"; read HOSTNAME
 	echo "Bootloader id";read BOOTID
@@ -41,10 +41,10 @@ echo "Wiping and partitioning drive" && {
 	}
 
 echo "Creating Filesystems" && {
-  	echo -n "$EPASS" | cryptsetup luksFormat --type luks1 "$DISK-part2"
-  	echo "$EPASS" | cryptsetup luksOpen "$DISK-part2" $RLABEL
-  	mkfs.ext4 -e remount-ro -E discard,lazy_journal_init=0,lazy_itable_init=0 -L $RLABEL -m 1 -U time -v /dev/mapper/$RLABEL
-  	mount /dev/mapper/$RLABEL /mnt
+  	#echo -n "$EPASS" | cryptsetup luksFormat --type luks1 "$DISK-part2"
+  	#echo "$EPASS" | cryptsetup luksOpen "$DISK-part2" $RLABEL
+  	mkfs.ext4 -E discard,lazy_journal_init=0,lazy_itable_init=0 -L $RLABEL -m 1 -U time -v "$DISK-part2"
+  	mount "$DISK-part2" /mnt
   	mkfs.vfat -F 32 -s 1 -v -n "$EFILABEL" "$DISK-part1"
   	mkdir -p /mnt/boot/efi
   	mount "$DISK-part1" /mnt/boot/efi
