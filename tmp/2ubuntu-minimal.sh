@@ -7,23 +7,16 @@ echo "Update packages and configure system" && {
 	apt update
 	apt full-upgrade -yq
 	dpkg-reconfigure locales tzdata keyboard-configuration console-setup
-	apt install -yq nano dosfstools cryptsetup ubuntu-standard linux-image-generic linux-image-lowlatency-hwe-20.04
+	apt install -yq nano dosfstools cryptsetup ubuntu-standard linux-image-generic
   }
 
-echo "Adding system groups" && {
-	addgroup --system lpadmin
-	addgroup --system lxd
-	addgroup --system sambashare
-	addgroup --system gpio
-	addgroup --system i2c
-	addgroup --system input
-	addgroup --system spi
+echo "Adding wheel group" && {
 	addgroup --system wheel
 	}
 
 echo "Create user" && {
 	useradd -m -s /bin/bash "$USER"
-	usermod -aG adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo,gpio,i2c,input,spi,audio,wheel "$USER"
+	usermod -aG cdrom,plugdev,sudo,audio,wheel "$USER"
 }
 
 echo "Install GRUB" && {
@@ -39,8 +32,7 @@ echo "Install user packages" && {
 	xargs -a ubuntu-gui apt install -yq 
 	}
 
-echo "Set passwords" && {
-	passwd root
+echo "Set $USER password" && {
 	passwd "$USER"
 	}
 set -e
